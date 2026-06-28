@@ -1,7 +1,7 @@
-@import "./styles/home.scss";
-@import "./styles/settings.scss";
-@import "./styles/game.scss";
-@import "./styles/gameover.scss";
+@use "./styles/home";
+@use "./styles/settings";
+@use "./styles/game";
+@use "./styles/gameover";
 
 * {
   box-sizing: border-box;
@@ -23,4 +23,6 @@
 
 body {
   max-width: 1920px;
+  background-color: #000000;
+  margin: 0 auto;
 }
