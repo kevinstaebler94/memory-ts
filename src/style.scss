@@ -25,4 +25,17 @@ body {
   max-width: 1920px;
   background-color: #000000;
   margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  display: flex;
+  flex: 1;
+}
+
+header,
+footer {
+  height: 80px;
 }

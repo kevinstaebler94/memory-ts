@@ -1,5 +1,5 @@
 .settings {
-  height: 100vh;
+  flex: 1;
   width: 100%;
   background-color: whitesmoke;
   display: flex;
@@ -23,11 +23,11 @@
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
-  }
 
-  &__section-container img {
-    height: 32px;
-    width: 32px;
+    img {
+      width: 32px;
+      height: 32px;
+    }
   }
 
   &__list {
@@ -39,8 +39,37 @@
   &__label {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding-bottom: 0.5rem;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    position: relative;
+    cursor: pointer;
+  }
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  &__radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid black;
+    border-radius: 50%;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: black;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
   }
 
   &__preview-container {
@@ -51,7 +80,6 @@
     padding: 1rem 1.5rem;
     border: 1px solid red;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
     gap: 1rem;
     font-size: 1.5rem;
@@ -62,5 +90,10 @@
     align-items: center;
     gap: 0.5rem;
     border: none;
+  }
+
+  &__label:hover &__radio::after,
+  &__input:checked + &__radio::after {
+    opacity: 1;
   }
 }
