@@ -3,6 +3,10 @@ type Theme = {
   image: string;
 };
 
+type Player = {
+  name: string;
+};
+
 const themeData = {
   "code-vibes": {
     name: "Code vibes",
@@ -25,9 +29,20 @@ const themeData = {
   },
 };
 
+const playerData = {
+  blue: {
+    name: "Blue",
+  },
+  orange: {
+    name: "Orange",
+  },
+};
+
 export function initSettings(): void {
   renderSettings();
   initThemeEvents();
+  initPlayerEvents();
+  initBoardEvents();
 }
 
 function renderSettings() {
@@ -83,14 +98,14 @@ function renderSettings() {
             <ul class="settings__list">
               <li>
                 <label class="settings__label">
-                  <input class="settings__input" type="radio" name="player" />
+                  <input class="settings__input" type="radio" name="player" value="blue" />
                   <span class="settings__radio"></span>
                   <span class="settings__text">Blue</span>
                 </label>
               </li>
               <li>
                 <label class="settings__label">
-                  <input class="settings__input" type="radio" name="player" />
+                  <input class="settings__input" type="radio" name="player" value="orange"/>
                   <span class="settings__radio"></span>
                   <span class="settings__text">Orange</span>
                 </label>
@@ -105,21 +120,21 @@ function renderSettings() {
             <ul class="settings__list">
               <li>
                 <label class="settings__label">
-                  <input class="settings__input" type="radio" name="board" />
+                  <input class="settings__input" type="radio" name="board" value="16"/>
                   <span class="settings__radio"></span>
                   <span class="settings__text">16 cards</span>
                 </label>
               </li>
               <li>
                 <label class="settings__label">
-                  <input class="settings__input" type="radio" name="board" />
+                  <input class="settings__input" type="radio" name="board" value="24"/>
                   <span class="settings__radio"></span>
                   <span class="settings__text">24 cards</span>
                 </label>
               </li>
               <li>
                 <label class="settings__label">
-                  <input class="settings__input" type="radio" name="board" />
+                  <input class="settings__input" type="radio" name="board" value="36"/>
                   <span class="settings__radio"></span>
                   <span class="settings__text">36 cards</span>
                 </label>
@@ -133,9 +148,9 @@ function renderSettings() {
               <img class="settings__preview-image" src="src/assets/images/theme-one.svg" alt="" />
             </div>
             <div class="settings__preview-bar">
-              <span class="settings__theme">Game theme</span>
-              <span class="settings__player">player</span>
-              <span class="settings__board">Board size</span>
+              <span class="settings__preview-theme">Game theme</span>
+              <span class="settings__preview-player">Player</span>
+              <span class="settings__preview-board">Board size</span>
               <button class="settings__play-button">
                 <img src="src/assets/icons/play-icon.svg" alt="" />
                 <span>Start</span>
@@ -171,6 +186,7 @@ function handleThemeChange(event: Event): void {
   const theme = themeData[value as keyof typeof themeData];
 
   updateThemePreview(theme);
+  updateThemePreviewName(theme);
 }
 
 function updateThemePreview(theme: Theme): void {
@@ -178,6 +194,7 @@ function updateThemePreview(theme: Theme): void {
     ".settings__preview-image",
   ) as HTMLImageElement;
 
+  if (!image) return;
   image.src = theme.image;
 }
 
@@ -206,4 +223,67 @@ function handleThemeDefault(): void {
   const theme = themeData[value as keyof typeof themeData];
 
   updateThemePreview(theme);
+}
+
+function initPlayerEvents() {
+  const playerInputs = document.querySelectorAll<HTMLInputElement>(
+    ".settings__input[name='player']",
+  );
+
+  playerInputs.forEach((input) => {
+    input.addEventListener("change", handlePlayerChange);
+  });
+}
+
+function handlePlayerChange(event: Event): void {
+  const input = event.currentTarget as HTMLInputElement;
+  const value = input.value;
+
+  updatePlayerPreview(value);
+}
+
+function updatePlayerPreview(value: string): void {
+  const playerName = playerData[value as keyof typeof playerData].name;
+  const playerPreview = document.querySelector<HTMLSpanElement>(
+    ".settings__preview-player",
+  );
+
+  if (!playerPreview) return;
+
+  playerPreview.textContent = playerName;
+}
+
+function updateThemePreviewName(theme: Theme): void {
+  const imageName = document.querySelector<HTMLSpanElement>(
+    ".settings__preview-theme",
+  );
+
+  if (!imageName) return;
+  imageName.textContent = theme.name;
+}
+
+function initBoardEvents() {
+  const boardInputs = document.querySelectorAll<HTMLInputElement>(
+    ".settings__input[name='board']",
+  );
+
+  boardInputs.forEach((input) => {
+    input.addEventListener("change", handleBoardChange);
+  });
+}
+
+function handleBoardChange(event: Event): void {
+  const input = event.currentTarget as HTMLInputElement;
+  const value = input.value;
+
+  updateBoardPreview(value);
+}
+
+function updateBoardPreview(value: string) {
+  const board = document.querySelector<HTMLSpanElement>(
+    ".settings__preview-board",
+  );
+
+  if (!board) return;
+  board.textContent = value;
 }
