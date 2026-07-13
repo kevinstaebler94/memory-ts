@@ -43,9 +43,10 @@ export function initSettings(): void {
   initThemeEvents();
   initPlayerEvents();
   initBoardEvents();
+  initGame();
 }
 
-function renderSettings() {
+function renderSettings(): void {
   const app = document.querySelector("#app");
 
   if (!app) return;
@@ -145,13 +146,22 @@ function renderSettings() {
         <div class="settings__right">
           <section class="settings__game-preview">
             <div class="settings__preview-container">
-              <img class="settings__preview-image" src="src/assets/images/theme-one.svg" alt="" />
+              <img src="src/assets/images/theme-one.svg" alt="" />
             </div>
             <div class="settings__preview-bar">
-              <span class="settings__preview-theme">Game theme</span>
-              <span class="settings__preview-player">Player</span>
-              <span class="settings__preview-board">Board size</span>
-              <button class="settings__play-button">
+              <div class="settings__preview-item">
+                <span class="settings__preview-theme">Game theme</span>
+              </div>
+
+              <div class="settings__preview-item">
+                <span class="settings__preview-player">Player</span>
+              </div>
+
+              <div class="settings__preview-item">
+                <span class="settings__preview-board">Board size</span>
+              </div>
+
+              <button class="settings__play-button" disabled>
                 <img src="src/assets/icons/play-icon.svg" alt="" />
                 <span>Start</span>
               </button>
@@ -169,6 +179,7 @@ function initThemeEvents(): void {
 
   themeInputs.forEach((input) => {
     input.addEventListener("change", handleThemeChange);
+    input.addEventListener("change", checkSettings);
   });
 
   const themeLabels =
@@ -225,13 +236,14 @@ function handleThemeDefault(): void {
   updateThemePreview(theme);
 }
 
-function initPlayerEvents() {
+function initPlayerEvents(): void {
   const playerInputs = document.querySelectorAll<HTMLInputElement>(
     ".settings__input[name='player']",
   );
 
   playerInputs.forEach((input) => {
     input.addEventListener("change", handlePlayerChange);
+    input.addEventListener("change", checkSettings);
   });
 }
 
@@ -262,13 +274,14 @@ function updateThemePreviewName(theme: Theme): void {
   imageName.textContent = theme.name;
 }
 
-function initBoardEvents() {
+function initBoardEvents(): void {
   const boardInputs = document.querySelectorAll<HTMLInputElement>(
     ".settings__input[name='board']",
   );
 
   boardInputs.forEach((input) => {
     input.addEventListener("change", handleBoardChange);
+    input.addEventListener("change", checkSettings);
   });
 }
 
@@ -286,4 +299,38 @@ function updateBoardPreview(value: string) {
 
   if (!board) return;
   board.textContent = value;
+}
+
+function checkSettings(): void {
+  const theme = document.querySelector(
+    ".settings__input[name='theme']:checked",
+  );
+
+  const player = document.querySelector(
+    ".settings__input[name='player']:checked",
+  );
+
+  const board = document.querySelector(
+    ".settings__input[name='board']:checked",
+  );
+
+  const playBtn = document.querySelector<HTMLButtonElement>(
+    ".settings__play-button",
+  );
+
+  if (!playBtn) return;
+  playBtn.disabled = !(theme && player && board);
+}
+
+function initGame(): void {
+  const playBtn = document.querySelector<HTMLButtonElement>(
+    ".settings__play-button",
+  );
+
+  if (!playBtn) return;
+  playBtn.addEventListener("click", startNewGame);
+}
+
+function startNewGame() {
+  console.log("Test");
 }

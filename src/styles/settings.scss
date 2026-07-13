@@ -76,24 +76,108 @@
     padding-bottom: 1.5rem;
   }
 
+  &__preview-container img {
+    width: 550px;
+  }
+
   &__preview-bar {
-    padding: 1rem 1.5rem;
+    height: 75px;
     border: 1px solid red;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    // gap: 1rem;
     font-size: 1.5rem;
+    padding: 0.5rem;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  &__preview-item {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__preview-theme {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      background-image: url("../../src/assets/icons/yellow-diagonal-line.svg");
+      background-repeat: no-repeat;
+      background-size: contain;
+      height: 50px;
+      width: 30px;
+      top: 50%;
+      margin-left: 15px;
+      transform: translateY(-50%);
+    }
+  }
+
+  &__preview-player {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      background-image: url("../../src/assets/icons/yellow-diagonal-line.svg");
+      background-repeat: no-repeat;
+      background-size: contain;
+      height: 50px;
+      width: 30px;
+      top: 50%;
+      margin-left: 15px;
+      transform: translateY(-50%);
+    }
   }
 
   &__play-button {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background-color: yellow;
     border: none;
+    cursor: pointer;
+
+    &:disabled {
+      color: black;
+      background-color: rgba(255, 255, 0, 0.5);
+    }
+
+    img {
+      width: 25px;
+    }
+
+    span {
+      font-size: 1.5rem;
+    }
   }
 
   &__label:hover &__radio::after,
   &__input:checked + &__radio::after {
     opacity: 1;
+  }
+
+  &__label:hover &__text {
+    font-weight: 800;
+  }
+
+  &__text {
+    position: relative;
+  }
+
+  &__label:hover &__text::after {
+    content: "";
+    position: absolute;
+    background-image: url("../../src/assets/icons/yellow-line.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 16px;
+    width: 60px;
+    top: 50%;
+    left: calc(100% + 10px);
+    transform: translateY(-50%);
   }
 }
