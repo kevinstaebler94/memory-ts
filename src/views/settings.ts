@@ -1,3 +1,7 @@
+import { initGame } from "./game";
+
+initGame();
+
 type Theme = {
   name: string;
   image: string;
@@ -43,7 +47,7 @@ export function initSettings(): void {
   initThemeEvents();
   initPlayerEvents();
   initBoardEvents();
-  initGame();
+  initPlayButton();
 }
 
 function renderSettings(): void {
@@ -322,7 +326,7 @@ function checkSettings(): void {
   playBtn.disabled = !(theme && player && board);
 }
 
-function initGame(): void {
+function initPlayButton(): void {
   const playBtn = document.querySelector<HTMLButtonElement>(
     ".settings__play-button",
   );
@@ -332,5 +336,5 @@ function initGame(): void {
 }
 
 function startNewGame() {
-  console.log("Test");
+  initGame();
 }
