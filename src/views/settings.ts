@@ -7,29 +7,25 @@ type Theme = {
   image: string;
 };
 
-type Player = {
-  name: string;
-};
-
 const themeData = {
   "code-vibes": {
     name: "Code vibes",
-    image: "src/assets/images/theme-one.svg",
+    image: "/src/assets/images/preview/theme-one.svg",
   },
 
   gaming: {
     name: "Gaming",
-    image: "src/assets/images/theme-two.svg",
+    image: "/src/assets/images/preview/theme-two.svg",
   },
 
   "da-projects": {
     name: "DA Projects",
-    image: "src/assets/images/theme-three.svg",
+    image: "/src/assets/images/preview/theme-three.svg",
   },
 
   foods: {
     name: "Foods",
-    image: "src/assets/images/theme-four.svg",
+    image: "/src/assets/images/preview/theme-four.svg",
   },
 };
 
@@ -150,7 +146,7 @@ function renderSettings(): void {
         <div class="settings__right">
           <section class="settings__game-preview">
             <div class="settings__preview-container">
-              <img src="src/assets/images/theme-one.svg" alt="" />
+              <img class="settings__preview-image" src="src/assets/images/preview/theme-one.svg" alt="" />
             </div>
             <div class="settings__preview-bar">
               <div class="settings__preview-item">
