@@ -7,6 +7,12 @@ type Theme = {
   image: string;
 };
 
+export type GameSettings = {
+  theme: string;
+  player: string;
+  board: number;
+};
+
 const themeData = {
   "code-vibes": {
     name: "Code vibes",
@@ -37,6 +43,10 @@ const playerData = {
     name: "Orange",
   },
 };
+
+// const gameData = {
+//   theme:
+// }
 
 export function initSettings(): void {
   renderSettings();
@@ -332,5 +342,29 @@ function initPlayButton(): void {
 }
 
 function startNewGame() {
-  initGame();
+  getSelectedSettings();
+}
+
+function getSelectedSettings(): void {
+  const theme = document.querySelector<HTMLInputElement>(
+    ".settings__input[name='theme']:checked",
+  );
+
+  const player = document.querySelector<HTMLInputElement>(
+    ".settings__input[name='player']:checked",
+  );
+
+  const board = document.querySelector<HTMLInputElement>(
+    ".settings__input[name='board']:checked",
+  );
+
+  if (!theme || !player || !board) return;
+
+  const selectedSettings = {
+    theme: theme.value,
+    player: player.value,
+    board: Number(board.value),
+  };
+
+  initGame(selectedSettings);
 }
