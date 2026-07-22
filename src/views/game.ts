@@ -1,6 +1,5 @@
 import type { GameSettings } from "./settings";
-
-const themeData = {
+export const themeData = {
   "code-vibes": {
     name: "Code vibes",
     className: "game--code-vibes",
@@ -108,4 +107,53 @@ export function initGame(settings: GameSettings): void {
 
 function renderGame(settings: GameSettings): void {
   if (!settings) return;
+
+  const selectedTheme = themeData[settings.theme as keyof typeof themeData];
+  const className = selectedTheme.className;
+  const cards = selectedTheme.images;
+
+  const app = document.querySelector("#app");
+
+  if (!app) return;
+
+  app.innerHTML = `
+  <div class="game">
+    <header class="game__header">
+      <div class="game__player-container">
+        <div class="player-one">
+          <img src="">
+          <span class="player-one__name">Orange</span>
+          <span class="player-one__stats">6</span>
+        </div>
+        <div class="player-two">
+          <img src="">
+          <span class="player-two__name">Blue</span>
+          <span class="player-two__stats">2</span>
+        </div>
+      </div>
+      <div class="game__current-player">
+        <span>Current player:</span>
+        <img src="">
+      </div>
+      <div class="game__exit-game">
+        <img src="">
+        <span>Exit game</span>
+      </div>
+    </header>
+    <main id="board" class="game__board"></main>
+  </div>
+  `;
+
+  const board = document.querySelector("#board");
+  let boardHTML = "";
+
+  if (!board) return;
+
+  for (let i = 0; i < settings.board; i++) {
+    boardHTML += `
+      <div class="game__card"></div>
+    `;
+  }
+
+  board.innerHTML = boardHTML;
 }

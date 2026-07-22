@@ -1,0 +1,43 @@
+.game {
+  flex: 1;
+  width: 100%;
+  background-color: #303131;
+  color: whitesmoke;
+
+  &__header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  &__player-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border: 2px solid blue;
+    padding: 1rem 1.5rem;
+  }
+
+  &__exit-game {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border: 2px solid blue;
+    padding: 1rem 1.5rem;
+  }
+
+  &__board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    width: fit-content;
+    margin: 3rem auto 0;
+  }
+
+  &__card {
+    width: 120px;
+    aspect-ratio: 1 / 1;
+    background-color: rebeccapurple;
+  }
+}
