@@ -9,7 +9,6 @@ export const themeData = {
       "src/assets/images/themes/code-vibes/css.svg",
       "src/assets/images/themes/code-vibes/django.svg",
       "src/assets/images/themes/code-vibes/firebase.svg",
-      "src/assets/images/themes/code-vibes/front.svg",
       "src/assets/images/themes/code-vibes/git.svg",
       "src/assets/images/themes/code-vibes/github.svg",
       "src/assets/images/themes/code-vibes/html.svg",
@@ -36,7 +35,6 @@ export const themeData = {
       "src/assets/images/themes/gaming/coin.svg",
       "src/assets/images/themes/gaming/controller.svg",
       "src/assets/images/themes/gaming/dice.svg",
-      "src/assets/images/themes/gaming/front.svg",
       "src/assets/images/themes/gaming/gameboy.svg",
       "src/assets/images/themes/gaming/levelup.svg",
       "src/assets/images/themes/gaming/maze.svg",
@@ -61,7 +59,6 @@ export const themeData = {
       "src/assets/images/themes/da-projects/cuisine.svg",
       "src/assets/images/themes/da-projects/da-bubble.svg",
       "src/assets/images/themes/da-projects/eggs.svg",
-      "src/assets/images/themes/da-projects/front.svg",
       "src/assets/images/themes/da-projects/greatert-than.svg",
       "src/assets/images/themes/da-projects/join.svg",
       "src/assets/images/themes/da-projects/lieferando.svg",
@@ -111,6 +108,16 @@ function renderGame(settings: GameSettings): void {
   const selectedTheme = themeData[settings.theme as keyof typeof themeData];
   const className = selectedTheme.className;
   const cards = selectedTheme.images;
+  const pairCount = settings.board / 2;
+  const selectedCards = cards.slice(0, pairCount);
+  const gameCards = [...selectedCards, ...selectedCards];
+
+  for (let i = gameCards.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    const temp = gameCards[i];
+    gameCards[i] = gameCards[randomIndex];
+    gameCards[randomIndex] = temp;
+  }
 
   const app = document.querySelector("#app");
 
@@ -140,7 +147,7 @@ function renderGame(settings: GameSettings): void {
         <span>Exit game</span>
       </div>
     </header>
-    <main id="board" class="game__board"></main>
+    <main id="board" class="game__board "></main>
   </div>
   `;
 
@@ -149,9 +156,11 @@ function renderGame(settings: GameSettings): void {
 
   if (!board) return;
 
-  for (let i = 0; i < settings.board; i++) {
+  for (let i = 0; i < gameCards.length; i++) {
     boardHTML += `
-      <div class="game__card"></div>
+      <div class="game__card">
+        <img class="game__card-image" src="${gameCards[i]}">
+      </div>
     `;
   }
 
