@@ -29,16 +29,36 @@
 
   &__board {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
     width: fit-content;
     margin: 3rem auto 0;
+
+    &--16 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    &--24 {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    &--36 {
+      grid-template-columns: repeat(6, 1fr);
+    }
   }
 
   &__card {
     width: 120px;
     aspect-ratio: 1 / 1;
-    background-color: rebeccapurple;
+    position: relative;
+    cursor: pointer;
+  }
+
+  &__card-cover {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    position: absolute;
   }
 
   &__card-image {
@@ -46,5 +66,10 @@
     width: 100%;
     object-fit: cover;
     aspect-ratio: 1 / 1;
+    position: absolute;
+  }
+
+  &__isFlipped {
+    transform: rotateY(180deg);
   }
 }

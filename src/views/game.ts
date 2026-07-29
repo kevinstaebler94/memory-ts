@@ -23,6 +23,7 @@ export const themeData = {
       "src/assets/images/themes/code-vibes/vsc.svg",
       "src/assets/images/themes/code-vibes/vue.svg",
     ],
+    front: "src/assets/images/themes/code-vibes/front.svg",
   },
   gaming: {
     name: "Gaming",
@@ -47,6 +48,7 @@ export const themeData = {
       "src/assets/images/themes/gaming/square.svg",
       "src/assets/images/themes/gaming/triangle.svg",
     ],
+    front: "src/assets/images/themes/da-projects/front.svg",
   },
   "da-projects": {
     name: "DA-Projects",
@@ -71,6 +73,7 @@ export const themeData = {
       "src/assets/images/themes/da-projects/tic-tac-toe.svg",
       "src/assets/images/themes/da-projects/wave.svg",
     ],
+    front: "src/assets/images/themes/foods/front.svg",
   },
   foods: {
     name: "Foods",
@@ -95,6 +98,7 @@ export const themeData = {
       "src/assets/images/themes/foods/taco.svg",
       "src/assets/images/themes/foods/wrap.svg",
     ],
+    front: "src/assets/images/themes/gaming/front.svg",
   },
 };
 
@@ -108,6 +112,7 @@ function renderGame(settings: GameSettings): void {
   const selectedTheme = themeData[settings.theme as keyof typeof themeData];
   const className = selectedTheme.className;
   const cards = selectedTheme.images;
+  const cardsCover = selectedTheme.front;
   const pairCount = settings.board / 2;
   const selectedCards = cards.slice(0, pairCount);
   const gameCards = [...selectedCards, ...selectedCards];
@@ -147,7 +152,7 @@ function renderGame(settings: GameSettings): void {
         <span>Exit game</span>
       </div>
     </header>
-    <main id="board" class="game__board "></main>
+    <main id="board" class="game__board game__board--${settings.board}"></main>
   </div>
   `;
 
@@ -159,10 +164,24 @@ function renderGame(settings: GameSettings): void {
   for (let i = 0; i < gameCards.length; i++) {
     boardHTML += `
       <div class="game__card">
+        <img class="game__card-cover" src="${cardsCover}">
         <img class="game__card-image" src="${gameCards[i]}">
       </div>
     `;
   }
 
   board.innerHTML = boardHTML;
+  turnCardAround();
+}
+
+function turnCardAround(): void {
+  const selectedCard = document.querySelector(".game__card");
+
+  if (!selectedCard) return;
+
+  selectedCard.addEventListener("click", () => {
+    console.log("click");
+
+    selectedCard.classList.add("isFlipped");
+  });
 }
