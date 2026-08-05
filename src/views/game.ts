@@ -175,13 +175,52 @@ function renderGame(settings: GameSettings): void {
 }
 
 function turnCardAround(): void {
-  const selectedCard = document.querySelector(".game__card");
+  const selectedCard = document.querySelectorAll<HTMLDivElement>(".game__card");
+  let firstCard: HTMLDivElement | null = null;
+  let secondCard: HTMLDivElement | null = null;
 
-  if (!selectedCard) return;
+  selectedCard.forEach((card) => {
+    card.addEventListener("click", () => {
+      card.classList.toggle("is-flipped");
 
-  selectedCard.addEventListener("click", () => {
-    console.log("click");
+      if (firstCard == null) {
+        firstCard = card;
+      } else {
+        secondCard = card;
+      }
 
-    selectedCard.classList.add("isFlipped");
+      if (firstCard && secondCard) {
+        checkCardPairs(firstCard, secondCard);
+      }
+
+      const cover = card.querySelector<HTMLImageElement>(".game__card-cover");
+      const image = card.querySelector<HTMLImageElement>(".game__card-image");
+
+      if (!cover || !image) return;
+
+      if (card.classList.contains("is-flipped")) {
+        cover.style.opacity = "0";
+        image.style.opacity = "1";
+      } else {
+        cover.style.opacity = "1";
+        image.style.opacity = "0";
+      }
+    });
   });
+}
+
+function checkCardPairs(
+  firstCard: HTMLDivElement,
+  secondCard: HTMLDivElement,
+): void {
+  const firstImage =
+    firstCard.querySelector<HTMLImageElement>(".game__card-image")?.src;
+  const secondImage =
+    secondCard.querySelector<HTMLImageElement>(".game__card-image")?.src;
+
+  if (firstImage === secondImage) {
+    console.log("true");
+  } else {
+    console.log("false");
+  }
 }
