@@ -1,7 +1,5 @@
 import { initGame } from "./game";
 
-initGame();
-
 type Theme = {
   name: string;
   image: string;
@@ -11,6 +9,16 @@ export type GameSettings = {
   theme: string;
   player: string;
   board: number;
+};
+
+export type PlayerData = {
+  blue: Player;
+  orange: Player;
+};
+
+type Player = {
+  name: string;
+  image: string;
 };
 
 const themeData = {
@@ -38,9 +46,11 @@ const themeData = {
 const playerData = {
   blue: {
     name: "Blue",
+    image: "src/assets/icons/label-blue.svg",
   },
   orange: {
     name: "Orange",
+    image: "src/assets/icons/label-orange.svg",
   },
 };
 
@@ -366,5 +376,5 @@ function getSelectedSettings(): void {
     board: Number(board.value),
   };
 
-  initGame(selectedSettings);
+  initGame(selectedSettings, playerData);
 }

@@ -1,4 +1,4 @@
-import type { GameSettings } from "./settings";
+import type { GameSettings, PlayerData } from "./settings";
 export const themeData = {
   "code-vibes": {
     name: "Code vibes",
@@ -102,15 +102,15 @@ export const themeData = {
   },
 };
 
-export function initGame(settings: GameSettings): void {
-  renderGame(settings);
+export function initGame(settings: GameSettings, playerData: PlayerData): void {
+  renderGame(settings, playerData);
 }
 
-function renderGame(settings: GameSettings): void {
-  if (!settings) return;
+function renderGame(settings: GameSettings, playerData: PlayerData): void {
+  if (!settings || !playerData) return;
 
   const selectedTheme = themeData[settings.theme as keyof typeof themeData];
-  const className = selectedTheme.className;
+  // const className = selectedTheme.className;
   const cards = selectedTheme.images;
   const cardsCover = selectedTheme.front;
   const pairCount = settings.board / 2;
@@ -129,29 +129,8 @@ function renderGame(settings: GameSettings): void {
   if (!app) return;
 
   app.innerHTML = `
-  <div class="game">
-    <header class="game__header">
-      <div class="game__player-container">
-        <div class="player-one">
-          <img src="">
-          <span class="player-one__name">Orange</span>
-          <span class="player-one__stats">6</span>
-        </div>
-        <div class="player-two">
-          <img src="">
-          <span class="player-two__name">Blue</span>
-          <span class="player-two__stats">2</span>
-        </div>
-      </div>
-      <div class="game__current-player">
-        <span>Current player:</span>
-        <img src="">
-      </div>
-      <div class="game__exit-game">
-        <img src="">
-        <span>Exit game</span>
-      </div>
-    </header>
+  <div id="game" class="game">
+    ${renderHeader(settings, playerData)}
     <main id="board" class="game__board game__board--${settings.board}"></main>
   </div>
   `;
@@ -223,4 +202,42 @@ function checkCardPairs(
   } else {
     console.log("false");
   }
+}
+
+function renderHeader(settings: GameSettings, playerData: PlayerData): string {
+  const playerOne = settings.player;
+  let playerTwo = "";
+
+  if (playerOne === "orange") {
+    playerTwo = "blue";
+  } else {
+    playerTwo = "orange";
+  }
+
+  let currentPlayer = playerOne;
+  const currentPlayerImage =
+    playerData[currentPlayer as keyof typeof playerData].image;
+
+  return `<header class="game__header">
+      <div class="game__player-container">
+        <div class="player-one">
+          <img class="player-one__image"src="">
+          <span class="player-one__name">${playerOne}</span>
+          <span class="player-one__stats">6</span>
+        </div>
+        <div class="player-two">
+          <img class="player-two__image">
+          <span class="player-two__name">${playerTwo}</span>
+          <span class="player-two__stats">2</span>
+        </div>
+      </div>
+      <div class="game__current-player">
+        <span>Current player:</span>
+        <img src="${currentPlayerImage}">
+      </div>
+      <div class="game__exit-game">
+        <img src="">
+        <span>Exit game</span>
+      </div>
+    </header>`;
 }
