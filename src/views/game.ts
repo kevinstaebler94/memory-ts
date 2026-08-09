@@ -1,4 +1,5 @@
 import type { GameSettings, PlayerData } from "./settings";
+import { playerData } from "./settings";
 export const themeData = {
   "code-vibes": {
     name: "Code vibes",
@@ -102,6 +103,10 @@ export const themeData = {
   },
 };
 
+let playerOne: string = "";
+let playerTwo: string = "";
+let currentPlayer: string = "";
+
 export function initGame(settings: GameSettings, playerData: PlayerData): void {
   renderGame(settings, playerData);
 }
@@ -110,7 +115,6 @@ function renderGame(settings: GameSettings, playerData: PlayerData): void {
   if (!settings || !playerData) return;
 
   const selectedTheme = themeData[settings.theme as keyof typeof themeData];
-  // const className = selectedTheme.className;
   const cards = selectedTheme.images;
   const cardsCover = selectedTheme.front;
   const pairCount = settings.board / 2;
@@ -124,6 +128,12 @@ function renderGame(settings: GameSettings, playerData: PlayerData): void {
     gameCards[randomIndex] = temp;
   }
 
+  renderGameHTML(settings, playerData);
+  renderBoardHTML(cardsCover, gameCards);
+  turnCardAround();
+}
+
+function renderGameHTML(settings: GameSettings, playerData: PlayerData): void {
   const app = document.querySelector("#app");
 
   if (!app) return;
@@ -134,7 +144,9 @@ function renderGame(settings: GameSettings, playerData: PlayerData): void {
     <main id="board" class="game__board game__board--${settings.board}"></main>
   </div>
   `;
+}
 
+function renderBoardHTML(cardsCover: string, gameCards: string[]): void {
   const board = document.querySelector("#board");
   let boardHTML = "";
 
@@ -148,9 +160,62 @@ function renderGame(settings: GameSettings, playerData: PlayerData): void {
       </div>
     `;
   }
-
   board.innerHTML = boardHTML;
-  turnCardAround();
+}
+
+function renderHeader(settings: GameSettings, playerData: PlayerData): string {
+  playerOne = settings.player;
+
+  if (playerOne === "orange") {
+    playerTwo = "blue";
+  } else {
+    playerTwo = "orange";
+  }
+
+  currentPlayer = playerOne;
+  const currentPlayerImage =
+    playerData[currentPlayer as keyof typeof playerData].image;
+  const playerOneImage = playerData[playerOne as keyof typeof playerData].image;
+  const playerTwoImage = playerData[playerTwo as keyof typeof playerData].image;
+
+  return renderHeaderHTML(
+    playerOneImage,
+    playerOne,
+    playerTwoImage,
+    playerTwo,
+    currentPlayerImage,
+  );
+}
+
+function renderHeaderHTML(
+  playerOneImage: string,
+  playerOne: string,
+  playerTwoImage: string,
+  playerTwo: string,
+  currentPlayerImage: string,
+) {
+  return `<header class="game__header">
+      <div class="game__player-container">
+        <div class="player-one">
+          <img class="player-one__image" src="${playerOneImage}">
+          <span class="player-one__name">${playerOne}</span>
+          <span class="player-one__stats">0</span>
+        </div>
+        <div class="player-two">
+          <img class="player-two__image" src="${playerTwoImage}">
+          <span class="player-two__name">${playerTwo}</span>
+          <span class="player-two__stats">0</span>
+        </div>
+      </div>
+      <div class="game__current-player">
+        <span class="game__current-player-label">Current player:</span>
+        <img class="game__current-player-image" src="${currentPlayerImage}">
+      </div>
+      <div class="game__exit-game">
+        <img src="">
+        <span>Exit game</span>
+      </div>
+    </header>`;
 }
 
 function turnCardAround(): void {
@@ -159,6 +224,7 @@ function turnCardAround(): void {
   let secondCard: HTMLDivElement | null = null;
 
   selectedCard.forEach((card) => {
+    if (card.classList.contains("is-matched")) return;
     card.addEventListener("click", () => {
       card.classList.toggle("is-flipped");
 
@@ -170,22 +236,28 @@ function turnCardAround(): void {
 
       if (firstCard && secondCard) {
         checkCardPairs(firstCard, secondCard);
+        firstCard = null;
+        secondCard = null;
       }
 
-      const cover = card.querySelector<HTMLImageElement>(".game__card-cover");
-      const image = card.querySelector<HTMLImageElement>(".game__card-image");
-
-      if (!cover || !image) return;
-
-      if (card.classList.contains("is-flipped")) {
-        cover.style.opacity = "0";
-        image.style.opacity = "1";
-      } else {
-        cover.style.opacity = "1";
-        image.style.opacity = "0";
-      }
+      updateCardVisibility(card);
     });
   });
+}
+
+function updateCardVisibility(card: HTMLDivElement) {
+  const cover = card.querySelector<HTMLImageElement>(".game__card-cover");
+  const image = card.querySelector<HTMLImageElement>(".game__card-image");
+
+  if (!cover || !image) return;
+
+  if (card.classList.contains("is-flipped")) {
+    cover.style.opacity = "0";
+    image.style.opacity = "1";
+  } else {
+    cover.style.opacity = "1";
+    image.style.opacity = "0";
+  }
 }
 
 function checkCardPairs(
@@ -198,46 +270,38 @@ function checkCardPairs(
     secondCard.querySelector<HTMLImageElement>(".game__card-image")?.src;
 
   if (firstImage === secondImage) {
-    console.log("true");
+    firstCard.classList.add("is-matched");
+    secondCard.classList.add("is-matched");
+    updateCardPairCount();
   } else {
-    console.log("false");
+    updateCurrentPlayer();
   }
 }
 
-function renderHeader(settings: GameSettings, playerData: PlayerData): string {
-  const playerOne = settings.player;
-  let playerTwo = "";
+function updateCurrentPlayer() {
+  const currentPlayerImage = document.querySelector<HTMLImageElement>(
+    ".game__current-player-image",
+  );
 
-  if (playerOne === "orange") {
-    playerTwo = "blue";
+  if (!currentPlayerImage) return;
+
+  if (currentPlayer === playerOne) {
+    currentPlayer = playerTwo;
+    currentPlayerImage.src =
+      playerData[currentPlayer as keyof typeof playerData].image;
   } else {
-    playerTwo = "orange";
+    currentPlayer = playerOne;
+    currentPlayerImage.src =
+      playerData[currentPlayer as keyof typeof playerData].image;
   }
+}
 
-  let currentPlayer = playerOne;
-  const currentPlayerImage =
-    playerData[currentPlayer as keyof typeof playerData].image;
+function updateCardPairCount(): void {
+  const playerClass = currentPlayer === playerOne ? "player-one" : "player-two";
 
-  return `<header class="game__header">
-      <div class="game__player-container">
-        <div class="player-one">
-          <img class="player-one__image"src="">
-          <span class="player-one__name">${playerOne}</span>
-          <span class="player-one__stats">6</span>
-        </div>
-        <div class="player-two">
-          <img class="player-two__image">
-          <span class="player-two__name">${playerTwo}</span>
-          <span class="player-two__stats">2</span>
-        </div>
-      </div>
-      <div class="game__current-player">
-        <span>Current player:</span>
-        <img src="${currentPlayerImage}">
-      </div>
-      <div class="game__exit-game">
-        <img src="">
-        <span>Exit game</span>
-      </div>
-    </header>`;
+  const playerStats = document.querySelector<HTMLSpanElement>(
+    `.${playerClass}__stats`,
+  );
+
+  console.log("Stats", playerStats?.textContent);
 }

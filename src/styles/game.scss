@@ -56,6 +56,10 @@
     &.is-flipped {
       transform: rotateY(180deg);
     }
+
+    &.is-matched {
+      pointer-events: none;
+    }
   }
 
   &__card-cover {
@@ -77,7 +81,21 @@
   }
 }
 
-.player-one {
-  &__image {
+.player-one,
+.player-two {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+
+  &__name {
+    text-transform: capitalize;
   }
+}
+
+.game__current-player {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
 }

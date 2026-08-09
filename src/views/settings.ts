@@ -43,7 +43,7 @@ const themeData = {
   },
 };
 
-const playerData = {
+export const playerData = {
   blue: {
     name: "Blue",
     image: "src/assets/icons/label-blue.svg",
