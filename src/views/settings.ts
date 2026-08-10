@@ -54,10 +54,6 @@ export const playerData = {
   },
 };
 
-// const gameData = {
-//   theme:
-// }
-
 export function initSettings(): void {
   renderSettings();
   initThemeEvents();
