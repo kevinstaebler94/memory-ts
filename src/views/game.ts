@@ -1,5 +1,5 @@
 import type { GameSettings, PlayerData } from "./settings";
-import { playerData } from "./settings";
+
 export const themeData = {
   "code-vibes": {
     name: "Code vibes",
@@ -132,8 +132,7 @@ function renderGame(settings: GameSettings, playerData: PlayerData): void {
 
   renderGameHTML(settings, playerData);
   renderBoardHTML(cardsCover, gameCards);
-  // turnCardAround();
-  handleCardGame();
+  handleCardGame(settings, playerData);
 }
 
 function renderGameHTML(settings: GameSettings, playerData: PlayerData): void {
@@ -221,41 +220,6 @@ function renderHeaderHTML(
     </header>`;
 }
 
-// function turnCardAround(): void {
-//   const selectedCard = document.querySelectorAll<HTMLDivElement>(".game__card");
-//   let firstCard: HTMLDivElement | null = null;
-//   let secondCard: HTMLDivElement | null = null;
-
-//   initiateFlipAnimation(selectedCard, firstCard, secondCard);
-// }
-
-// function initiateFlipAnimation(
-//   selectedCard: NodeListOf<HTMLDivElement>,
-//   firstCard: HTMLDivElement | null,
-//   secondCard: HTMLDivElement | null,
-// ): void {
-//   selectedCard.forEach((card) => {
-//     if (card.classList.contains("is-matched")) return;
-//     card.addEventListener("click", () => {
-//       card.classList.toggle("is-flipped");
-
-//       if (firstCard == null) {
-//         firstCard = card;
-//       } else {
-//         secondCard = card;
-//       }
-
-//       if (firstCard && secondCard) {
-//         checkCardPairs(firstCard, secondCard);
-//         firstCard = null;
-//         secondCard = null;
-//       }
-
-//       updateCardVisibility(card);
-//     });
-//   });
-// }
-
 function updateCardVisibility(card: HTMLDivElement) {
   const cover = card.querySelector<HTMLImageElement>(".game__card-cover");
   const image = card.querySelector<HTMLImageElement>(".game__card-image");
@@ -271,113 +235,108 @@ function updateCardVisibility(card: HTMLDivElement) {
   }
 }
 
-function checkCardPairs(
-  firstCard: HTMLDivElement,
-  secondCard: HTMLDivElement,
-): void {
-  const firstImage =
-    firstCard.querySelector<HTMLImageElement>(".game__card-image")?.src;
-  const secondImage =
-    secondCard.querySelector<HTMLImageElement>(".game__card-image")?.src;
+function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
+  let isChecking = false;
 
-  if (firstImage === secondImage) {
-    firstCard.classList.add("is-matched");
-    secondCard.classList.add("is-matched");
-    updateCardPairCount();
-  } else {
-    console.log("Kein Match");
-    updateCurrentPlayer();
-  }
-}
-
-function updateCurrentPlayer() {
-  const currentPlayerImage = document.querySelector<HTMLImageElement>(
-    ".game__current-player-image",
-  );
-
-  if (!currentPlayerImage) return;
-
-  if (currentPlayer === playerOne) {
-    currentPlayer = playerTwo;
-    currentPlayerImage.src =
-      playerData[currentPlayer as keyof typeof playerData].image;
-  } else {
-    currentPlayer = playerOne;
-    currentPlayerImage.src =
-      playerData[currentPlayer as keyof typeof playerData].image;
-  }
-}
-
-function updateCardPairCount(): void {
-  const playerClass = currentPlayer === playerOne ? "player-one" : "player-two";
-  const playerStats = document.querySelector<HTMLSpanElement>(
-    `.${playerClass}__stats`,
-  );
-
-  if (!playerStats) return;
-
-  if (currentPlayer === playerOne) {
-    playerOneScore++;
-    playerStats.textContent = String(playerOneScore);
-  } else {
-    playerTwoScore++;
-    playerStats.textContent = String(playerTwoScore);
-  }
-}
-
-function handleCardGame(): void {
-  // 1. alle Karten holen
   const cards = document.querySelectorAll<HTMLDivElement>(".game__card");
 
-  // 2. firstCard und secondCard vorbereiten
   let firstCard: HTMLDivElement | null = null;
   let secondCard: HTMLDivElement | null = null;
-  // 3. EventListener für jede Karte
+
   cards.forEach((card) => {
     card.addEventListener("click", () => {
-      // 4. prüfen: darf diese Karte angeklickt werden?
+      if (isChecking) return;
       if (card.classList.contains("is-matched")) return;
-      // 5. Karte aufdecken
+      if (card === firstCard) return;
+
       card.classList.add("is-flipped");
       updateCardVisibility(card);
-      // 6. firstCard oder secondCard setzen
+
       if (firstCard === null) {
         firstCard = card;
-      } else {
-        secondCard = card;
+        return;
       }
 
-      // 7. wenn zwei Karten vorhanden → vergleichen
-      if (firstCard && secondCard) {
-        const firstImage =
-          firstCard.querySelector<HTMLImageElement>(".game__card-image");
-        const secondImage =
-          secondCard.querySelector<HTMLImageElement>(".game__card-image");
+      secondCard = card;
+      isChecking = true;
 
-        if (!firstImage || !secondImage) return;
+      const firstImage =
+        firstCard.querySelector<HTMLImageElement>(".game__card-image");
 
-        if (firstImage.src === secondImage.src) {
-          // 8a. Match → offen lassen + Punkt
-          firstCard.classList.add("is-matched");
-          secondCard.classList.add("is-matched");
-          firstCard = null;
-          secondCard = null;
+      const secondImage =
+        secondCard.querySelector<HTMLImageElement>(".game__card-image");
+
+      if (!firstImage || !secondImage) {
+        isChecking = false;
+        return;
+      }
+
+      if (firstImage.src === secondImage.src) {
+        firstCard.classList.add("is-matched");
+        secondCard.classList.add("is-matched");
+
+        const playerClass =
+          currentPlayer === playerOne ? "player-one" : "player-two";
+
+        const playerStats = document.querySelector<HTMLSpanElement>(
+          `.${playerClass}__stats`,
+        );
+
+        if (currentPlayer === playerOne) {
+          playerOneScore++;
         } else {
-          // 8b. kein Match → kurz warten + beide schließen + Spieler wechseln
-          setTimeout(() => {
-            if (!firstCard || !secondCard) return;
-
-            firstCard.classList.remove("is-flipped");
-            secondCard.classList.remove("is-flipped");
-
-            updateCardVisibility(firstCard);
-            updateCardVisibility(secondCard);
-            // 9. firstCard und secondCard zurücksetzen
-            firstCard = null;
-            secondCard = null;
-          }, 1000);
+          playerTwoScore++;
         }
+
+        if (playerStats) {
+          const score =
+            currentPlayer === playerOne ? playerOneScore : playerTwoScore;
+
+          playerStats.textContent = String(score);
+        }
+        checkGameOver(settings.board);
+        firstCard = null;
+        secondCard = null;
+        isChecking = false;
+        return;
       }
+
+      setTimeout(() => {
+        if (!firstCard || !secondCard) return;
+
+        firstCard.classList.remove("is-flipped");
+        secondCard.classList.remove("is-flipped");
+
+        updateCardVisibility(firstCard);
+        updateCardVisibility(secondCard);
+
+        if (currentPlayer === playerOne) {
+          currentPlayer = playerTwo;
+        } else {
+          currentPlayer = playerOne;
+        }
+
+        const currentPlayerImage = document.querySelector<HTMLImageElement>(
+          ".game__current-player-image",
+        );
+
+        if (currentPlayerImage) {
+          currentPlayerImage.src =
+            playerData[currentPlayer as keyof typeof playerData].image;
+        }
+
+        firstCard = null;
+        secondCard = null;
+        isChecking = false;
+      }, 1000);
     });
   });
+}
+
+function checkGameOver(boardSize: number): void {
+  const matchedCards = document.querySelectorAll(".game__card.is-matched");
+
+  if (matchedCards.length === boardSize) {
+    console.log("Game Over!");
+  }
 }
