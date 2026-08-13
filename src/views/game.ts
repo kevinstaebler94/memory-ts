@@ -1,4 +1,5 @@
 import type { GameSettings, PlayerData } from "./settings";
+import { initGameOverScreen } from "./gameover";
 
 export const themeData = {
   "code-vibes": {
@@ -337,6 +338,16 @@ function checkGameOver(boardSize: number): void {
   const matchedCards = document.querySelectorAll(".game__card.is-matched");
 
   if (matchedCards.length === boardSize) {
+    initGameOverScreen();
     console.log("Game Over!");
+    if (playerOneScore > playerTwoScore) {
+      return console.log("Player one wins");
+    }
+    if (playerOneScore < playerTwoScore) {
+      return console.log("Player two wins");
+    }
+    if (playerOneScore === playerTwoScore) {
+      return console.log("Draw");
+    }
   }
 }

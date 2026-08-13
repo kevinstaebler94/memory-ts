@@ -1,0 +1,13 @@
+.game-over {
+  height: 100vh;
+  width: 100%;
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__headline {
+    font-size: 7.5rem;
+  }
+}
