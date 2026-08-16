@@ -40,10 +40,10 @@
     color: #2f3131;
     padding: 1.5rem;
     cursor: pointer;
-    transition: padding 250ms ease-in-out;
+    transition: transform 250ms ease-in-out;
 
     &:hover {
-      padding: 1.6rem 2rem;
+      transform: scale(1.08);
 
       .home__play-icon {
         transform: rotate(-30deg) scale(1.25);

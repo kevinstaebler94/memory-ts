@@ -21,7 +21,7 @@ type Player = {
   image: string;
 };
 
-const themeData = {
+const THEME_DATA = {
   "code-vibes": {
     name: "Code vibes",
     image: "/src/assets/images/preview/theme-one.svg",
@@ -43,7 +43,7 @@ const themeData = {
   },
 };
 
-export const playerData = {
+export const PLAYER_DATA = {
   blue: {
     name: "Blue",
     image: "src/assets/icons/label-blue.svg",
@@ -62,7 +62,7 @@ export function initSettings(): void {
   initPlayButton();
 }
 
-function renderSettings(): void {
+export function renderSettings(): void {
   const app = document.querySelector("#app");
 
   if (!app) return;
@@ -73,7 +73,7 @@ function renderSettings(): void {
           <h1 class="settings__headline">Settings</h1>
           <section class="settings__section settings__themes">
             <div class="settings__section-container">
-              <img src="src/assets/icons/theme.svg" alt="" />
+              <img src="src/assets/icons/theme.svg" alt="Game themes" />
               <h2 class="settings__section-title">Game themes</h2>
             </div>
             <ul class="settings__list">
@@ -109,7 +109,7 @@ function renderSettings(): void {
           </section>
           <section class="settings__section settings__player">
             <div class="settings__section-container">
-              <img src="src/assets/icons/player.svg" alt="" />
+              <img src="src/assets/icons/player.svg" alt="Player selection" />
               <h2 class="settings__section-title">Choose player</h2>
             </div>
             <ul class="settings__list">
@@ -131,7 +131,7 @@ function renderSettings(): void {
           </section>
           <section class="settings__section settings__board">
             <div class="settings__section-container">
-              <img src="src/assets/icons/board.svg" alt="" />
+              <img src="src/assets/icons/board.svg" alt="Board size" />
               <h2 class="settings__section-title">Board size</h2>
             </div>
             <ul class="settings__list">
@@ -162,7 +162,7 @@ function renderSettings(): void {
         <div class="settings__right">
           <section class="settings__game-preview">
             <div class="settings__preview-container">
-              <img class="settings__preview-image" src="src/assets/images/preview/theme-one.svg" alt="" />
+              <img class="settings__preview-image" src="src/assets/images/preview/theme-one.svg" alt="Preview of the selected game theme" />
             </div>
             <div class="settings__preview-bar">
               <div class="settings__preview-item">
@@ -178,7 +178,7 @@ function renderSettings(): void {
               </div>
 
               <button class="settings__play-button" disabled>
-                <img src="src/assets/icons/play-icon.svg" alt="" />
+                <img class="settings__play-icon" src="src/assets/icons/play-icon.svg" alt="" />
                 <span>Start</span>
               </button>
             </div>
@@ -210,7 +210,7 @@ function initThemeEvents(): void {
 function handleThemeChange(event: Event): void {
   const input = event.currentTarget as HTMLInputElement;
   const value = input.value;
-  const theme = themeData[value as keyof typeof themeData];
+  const theme = THEME_DATA[value as keyof typeof THEME_DATA];
 
   updateThemePreview(theme);
   updateThemePreviewName(theme);
@@ -234,7 +234,7 @@ function handleThemeHover(event: Event): void {
 
   if (!input) return;
   const value = input.value as string;
-  const theme = themeData[value as keyof typeof themeData];
+  const theme = THEME_DATA[value as keyof typeof THEME_DATA];
 
   updateThemePreview(theme);
 }
@@ -247,7 +247,7 @@ function handleThemeDefault(): void {
   if (!input) return;
 
   const value = input.value;
-  const theme = themeData[value as keyof typeof themeData];
+  const theme = THEME_DATA[value as keyof typeof THEME_DATA];
 
   updateThemePreview(theme);
 }
@@ -271,7 +271,7 @@ function handlePlayerChange(event: Event): void {
 }
 
 function updatePlayerPreview(value: string): void {
-  const playerName = playerData[value as keyof typeof playerData].name;
+  const playerName = PLAYER_DATA[value as keyof typeof PLAYER_DATA].name;
   const playerPreview = document.querySelector<HTMLSpanElement>(
     ".settings__preview-player",
   );
@@ -372,5 +372,5 @@ function getSelectedSettings(): void {
     board: Number(board.value),
   };
 
-  initGame(selectedSettings, playerData);
+  initGame(selectedSettings, PLAYER_DATA);
 }

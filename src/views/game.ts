@@ -1,7 +1,8 @@
 import type { GameSettings, PlayerData } from "./settings";
 import { initGameOverScreen } from "./gameover";
+import { renderEndScreen } from "./gameover";
 
-export const themeData = {
+export const THEME_DATA = {
   "code-vibes": {
     name: "Code vibes",
     className: "game--code-vibes",
@@ -29,7 +30,7 @@ export const themeData = {
   },
   gaming: {
     name: "Gaming",
-    className: "game--ganming",
+    className: "game--gaming",
     images: [
       "src/assets/images/themes/gaming/1up.svg",
       "src/assets/images/themes/gaming/banana.svg",
@@ -50,7 +51,7 @@ export const themeData = {
       "src/assets/images/themes/gaming/square.svg",
       "src/assets/images/themes/gaming/triangle.svg",
     ],
-    front: "src/assets/images/themes/da-projects/front.svg",
+    front: "src/assets/images/themes/gaming/front.svg",
   },
   "da-projects": {
     name: "DA-Projects",
@@ -63,7 +64,7 @@ export const themeData = {
       "src/assets/images/themes/da-projects/cuisine.svg",
       "src/assets/images/themes/da-projects/da-bubble.svg",
       "src/assets/images/themes/da-projects/eggs.svg",
-      "src/assets/images/themes/da-projects/greatert-than.svg",
+      "src/assets/images/themes/da-projects/greater-than.svg",
       "src/assets/images/themes/da-projects/join.svg",
       "src/assets/images/themes/da-projects/lieferando.svg",
       "src/assets/images/themes/da-projects/pokeball.svg",
@@ -75,7 +76,7 @@ export const themeData = {
       "src/assets/images/themes/da-projects/tic-tac-toe.svg",
       "src/assets/images/themes/da-projects/wave.svg",
     ],
-    front: "src/assets/images/themes/foods/front.svg",
+    front: "src/assets/images/themes/da-projects/front.svg",
   },
   foods: {
     name: "Foods",
@@ -100,7 +101,7 @@ export const themeData = {
       "src/assets/images/themes/foods/taco.svg",
       "src/assets/images/themes/foods/wrap.svg",
     ],
-    front: "src/assets/images/themes/gaming/front.svg",
+    front: "src/assets/images/themes/foods/front.svg",
   },
 };
 
@@ -117,7 +118,7 @@ export function initGame(settings: GameSettings, playerData: PlayerData): void {
 function renderGame(settings: GameSettings, playerData: PlayerData): void {
   if (!settings || !playerData) return;
 
-  const selectedTheme = themeData[settings.theme as keyof typeof themeData];
+  const selectedTheme = THEME_DATA[settings.theme as keyof typeof THEME_DATA];
   const cards = selectedTheme.images;
   const cardsCover = selectedTheme.front;
   const pairCount = settings.board / 2;
@@ -158,8 +159,8 @@ function renderBoardHTML(cardsCover: string, gameCards: string[]): void {
   for (let i = 0; i < gameCards.length; i++) {
     boardHTML += `
       <div class="game__card">
-        <img class="game__card-cover" src="${cardsCover}">
-        <img class="game__card-image" src="${gameCards[i]}">
+        <img class="game__card-cover" src="${cardsCover}" alt="Face-down memory card">
+        <img class="game__card-image" src="${gameCards[i]}" alt="Memory card image">
       </div>
     `;
   }
@@ -200,22 +201,22 @@ function renderHeaderHTML(
   return `<header class="game__header">
       <div class="game__player-container">
         <div class="player-one">
-          <img class="player-one__image" src="${playerOneImage}">
+          <img class="player-one__image" src="${playerOneImage}" alt="${playerOne} player">
           <span class="player-one__name">${playerOne}</span>
           <span class="player-one__stats">${playerOneScore}</span>
         </div>
         <div class="player-two">
-          <img class="player-two__image" src="${playerTwoImage}">
+          <img class="player-two__image" src="${playerTwoImage}" alt="${playerTwo} player">
           <span class="player-two__name">${playerTwo}</span>
           <span class="player-two__stats">${playerTwoScore}</span>
         </div>
       </div>
       <div class="game__current-player">
         <span class="game__current-player-label">Current player:</span>
-        <img class="game__current-player-image" src="${currentPlayerImage}">
+        <img class="game__current-player-image" src="${currentPlayerImage}" alt="${currentPlayer} player's turn">
       </div>
       <div class="game__exit-game">
-        <img src="">
+        <img src="" alt="">
         <span>Exit game</span>
       </div>
     </header>`;
@@ -324,6 +325,7 @@ function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
         if (currentPlayerImage) {
           currentPlayerImage.src =
             playerData[currentPlayer as keyof typeof playerData].image;
+          currentPlayerImage.alt = `${currentPlayer} player's turn`;
         }
 
         firstCard = null;
@@ -338,16 +340,17 @@ function checkGameOver(boardSize: number): void {
   const matchedCards = document.querySelectorAll(".game__card.is-matched");
 
   if (matchedCards.length === boardSize) {
-    initGameOverScreen();
-    console.log("Game Over!");
-    if (playerOneScore > playerTwoScore) {
-      return console.log("Player one wins");
-    }
-    if (playerOneScore < playerTwoScore) {
-      return console.log("Player two wins");
-    }
-    if (playerOneScore === playerTwoScore) {
-      return console.log("Draw");
-    }
+    initGameOverScreen(playerOne, playerOneScore, playerTwo, playerTwoScore);
+    setTimeout(() => {
+      if (playerOneScore > playerTwoScore) {
+        renderEndScreen(playerOne);
+      }
+      if (playerOneScore < playerTwoScore) {
+        renderEndScreen(playerTwo);
+      }
+      if (playerOneScore === playerTwoScore) {
+        renderEndScreen("draw");
+      }
+    }, 1500);
   }
 }

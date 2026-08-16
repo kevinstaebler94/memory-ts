@@ -1,7 +1,9 @@
-.game-over {
+.game-over,
+.endscreen {
   height: 100vh;
   width: 100%;
   background-color: whitesmoke;
+  color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,5 +11,36 @@
 
   &__headline {
     font-size: 7.5rem;
+  }
+}
+
+.endscreen {
+  height: 100vh;
+  width: 100%;
+  background-color: whitesmoke;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__winner {
+    text-transform: capitalize;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1.5rem;
+  }
+
+  &__subheadline {
+    font-size: 5rem;
+  }
+
+  &__headline {
+    font-size: 7.5rem;
+    text-transform: uppercase;
   }
 }

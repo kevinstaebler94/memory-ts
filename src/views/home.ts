@@ -38,11 +38,11 @@ function renderHome(): void {
 }
 
 function addEvents() {
-  const playBtn = document.querySelector(".home__play-button");
+  const playButton = document.querySelector(".home__play-button");
 
-  if (!playBtn) return;
+  if (!playButton) return;
 
-  playBtn.addEventListener("click", () => {
+  playButton.addEventListener("click", () => {
     initSettings();
   });
 }

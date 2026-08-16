@@ -10,9 +10,23 @@
 }
 
 @font-face {
-  font-family: "Almarai";
+  font-family: "Almarai-Light";
+  src: url("assets/fonts/Almarai-Light.ttf");
+}
+
+@font-face {
+  font-family: "Almarai-Regular";
   src: url("assets/fonts/Almarai-Regular.ttf");
-  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: "Almarai-Bold";
+  src: url("assets/fonts/Almarai-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Almarai-ExtraBold";
+  src: url("assets/fonts/Almarai-ExtraBold.ttf");
 }
 
 @font-face {
