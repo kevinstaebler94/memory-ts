@@ -5,8 +5,10 @@ type Theme = {
   image: string;
 };
 
+export type ThemeName = "code-vibes" | "gaming" | "da-projects" | "foods";
+
 export type GameSettings = {
-  theme: string;
+  theme: ThemeName;
   player: string;
   board: number;
 };
@@ -16,9 +18,9 @@ export type PlayerData = {
   orange: Player;
 };
 
-type Player = {
+export type Player = {
   name: string;
-  image: string;
+  images: Record<ThemeName, string>;
 };
 
 const THEME_DATA = {
@@ -43,14 +45,24 @@ const THEME_DATA = {
   },
 };
 
-export const PLAYER_DATA = {
+export const PLAYER_DATA: PlayerData = {
   blue: {
     name: "Blue",
-    image: "src/assets/icons/label-blue.svg",
+    images: {
+      "code-vibes": "src/assets/icons/label-blue.svg",
+      gaming: "src/assets/icons/chess-blue.svg",
+      "da-projects": "src/assets/icons/chess-blue.svg",
+      foods: "src/assets/icons/chess-blue.svg",
+    },
   },
   orange: {
     name: "Orange",
-    image: "src/assets/icons/label-orange.svg",
+    images: {
+      "code-vibes": "src/assets/icons/label-orange.svg",
+      gaming: "src/assets/icons/chess-orange.svg",
+      "da-projects": "src/assets/icons/chess-orange.svg",
+      foods: "src/assets/icons/chess-orange.svg",
+    },
   },
 };
 
@@ -366,8 +378,8 @@ function getSelectedSettings(): void {
 
   if (!theme || !player || !board) return;
 
-  const selectedSettings = {
-    theme: theme.value,
+  const selectedSettings: GameSettings = {
+    theme: theme.value as ThemeName,
     player: player.value,
     board: Number(board.value),
   };

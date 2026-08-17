@@ -1,4 +1,5 @@
 import { PLAYER_DATA, initSettings } from "./settings";
+import type { ThemeName } from "./settings";
 
 const END_GAME_DATA = {
   draw: {
@@ -17,8 +18,15 @@ export function initGameOverScreen(
   playerOneScore: number,
   playerTwo: string,
   playerTwoScore: number,
+  theme: ThemeName,
 ): void {
-  renderGameOverScreen(playerOne, playerOneScore, playerTwo, playerTwoScore);
+  renderGameOverScreen(
+    playerOne,
+    playerOneScore,
+    playerTwo,
+    playerTwoScore,
+    theme,
+  );
 }
 
 function renderGameOverScreen(
@@ -26,11 +34,12 @@ function renderGameOverScreen(
   playerOneScore: number,
   playerTwo: string,
   playerTwoScore: number,
+  theme: ThemeName,
 ): void {
   const playerOneImage =
-    PLAYER_DATA[playerOne as keyof typeof PLAYER_DATA].image;
+    PLAYER_DATA[playerOne as keyof typeof PLAYER_DATA].images[theme];
   const playerTwoImage =
-    PLAYER_DATA[playerTwo as keyof typeof PLAYER_DATA].image;
+    PLAYER_DATA[playerTwo as keyof typeof PLAYER_DATA].images[theme];
 
   const app = document.querySelector("#app");
 

@@ -97,12 +97,18 @@
     }
   }
 
-  &__preview-container {
-    padding-bottom: 1.5rem;
+  &__game-preview {
+    width: 650px;
   }
 
-  &__preview-container img {
-    width: 550px;
+  &__preview-container {
+    padding-bottom: 2rem;
+  }
+
+  &__preview-image {
+    display: block;
+    width: 90%;
+    justify-self: end;
   }
 
   &__preview-bar {

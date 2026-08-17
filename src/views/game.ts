@@ -1,4 +1,4 @@
-import type { GameSettings, PlayerData } from "./settings";
+import type { GameSettings, PlayerData, ThemeName } from "./settings";
 import { initGameOverScreen } from "./gameover";
 import { renderEndScreen } from "./gameover";
 
@@ -177,10 +177,14 @@ function renderHeader(settings: GameSettings, playerData: PlayerData): string {
   }
 
   currentPlayer = playerOne;
+  const playerOneImage =
+    playerData[playerOne as keyof PlayerData].images[settings.theme];
+
+  const playerTwoImage =
+    playerData[playerTwo as keyof PlayerData].images[settings.theme];
+
   const currentPlayerImage =
-    playerData[currentPlayer as keyof typeof playerData].image;
-  const playerOneImage = playerData[playerOne as keyof typeof playerData].image;
-  const playerTwoImage = playerData[playerTwo as keyof typeof playerData].image;
+    playerData[currentPlayer as keyof PlayerData].images[settings.theme];
 
   return renderHeaderHTML(
     playerOneImage,
@@ -216,7 +220,7 @@ function renderHeaderHTML(
         <img class="game__current-player-image" src="${currentPlayerImage}" alt="${currentPlayer} player's turn">
       </div>
       <div class="game__exit-game">
-        <img src="" alt="">
+        <img class="game__exit-icon" src="src/assets/icons/exit.svg" alt="">
         <span>Exit game</span>
       </div>
     </header>`;
@@ -296,7 +300,7 @@ function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
 
           playerStats.textContent = String(score);
         }
-        checkGameOver(settings.board);
+        checkGameOver(settings.board, settings.theme);
         firstCard = null;
         secondCard = null;
         isChecking = false;
@@ -324,7 +328,7 @@ function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
 
         if (currentPlayerImage) {
           currentPlayerImage.src =
-            playerData[currentPlayer as keyof typeof playerData].image;
+            playerData[currentPlayer as keyof PlayerData].images[settings.theme];
           currentPlayerImage.alt = `${currentPlayer} player's turn`;
         }
 
@@ -336,11 +340,17 @@ function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
   });
 }
 
-function checkGameOver(boardSize: number): void {
+function checkGameOver(boardSize: number, theme: ThemeName): void {
   const matchedCards = document.querySelectorAll(".game__card.is-matched");
 
   if (matchedCards.length === boardSize) {
-    initGameOverScreen(playerOne, playerOneScore, playerTwo, playerTwoScore);
+    initGameOverScreen(
+      playerOne,
+      playerOneScore,
+      playerTwo,
+      playerTwoScore,
+      theme,
+    );
     setTimeout(() => {
       if (playerOneScore > playerTwoScore) {
         renderEndScreen(playerOne);
