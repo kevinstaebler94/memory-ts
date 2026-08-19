@@ -5,7 +5,6 @@ import { renderEndScreen } from "./gameover";
 export const THEME_DATA = {
   "code-vibes": {
     name: "Code vibes",
-    className: "game--code-vibes",
     images: [
       "src/assets/images/themes/code-vibes/angular.svg",
       "src/assets/images/themes/code-vibes/bootstrap.svg",
@@ -30,7 +29,6 @@ export const THEME_DATA = {
   },
   gaming: {
     name: "Gaming",
-    className: "game--gaming",
     images: [
       "src/assets/images/themes/gaming/1up.svg",
       "src/assets/images/themes/gaming/banana.svg",
@@ -55,7 +53,6 @@ export const THEME_DATA = {
   },
   "da-projects": {
     name: "DA-Projects",
-    className: "game--da-projects",
     images: [
       "src/assets/images/themes/da-projects/broth.svg",
       "src/assets/images/themes/da-projects/chef.svg",
@@ -80,7 +77,6 @@ export const THEME_DATA = {
   },
   foods: {
     name: "Foods",
-    className: "game--foods",
     images: [
       "src/assets/images/themes/foods/burger.svg",
       "src/assets/images/themes/foods/cake.svg",
@@ -118,7 +114,7 @@ export function initGame(settings: GameSettings, playerData: PlayerData): void {
 function renderGame(settings: GameSettings, playerData: PlayerData): void {
   if (!settings || !playerData) return;
 
-  const selectedTheme = THEME_DATA[settings.theme as keyof typeof THEME_DATA];
+  const selectedTheme = THEME_DATA[settings.theme];
   const cards = selectedTheme.images;
   const cardsCover = selectedTheme.front;
   const pairCount = settings.board / 2;
@@ -143,7 +139,7 @@ function renderGameHTML(settings: GameSettings, playerData: PlayerData): void {
   if (!app) return;
 
   app.innerHTML = `
-  <div id="game" class="game">
+  <div id="game" class="game game--${settings.theme}">
     ${renderHeader(settings, playerData)}
     <main id="board" class="game__board game__board--${settings.board}"></main>
   </div>
@@ -192,6 +188,7 @@ function renderHeader(settings: GameSettings, playerData: PlayerData): string {
     playerTwoImage,
     playerTwo,
     currentPlayerImage,
+    settings.theme,
   );
 }
 
@@ -201,25 +198,26 @@ function renderHeaderHTML(
   playerTwoImage: string,
   playerTwo: string,
   currentPlayerImage: string,
-) {
-  return `<header class="game__header">
+  theme: ThemeName,
+): string {
+  return `<header class="game__header game__header--${theme}">
       <div class="game__player-container">
         <div class="player-one">
           <img class="player-one__image" src="${playerOneImage}" alt="${playerOne} player">
-          <span class="player-one__name">${playerOne}</span>
-          <span class="player-one__stats">${playerOneScore}</span>
+          <span class="player-one__name player-one__name--${playerOne}">${playerOne}</span>
+          <span class="player-one__stats player-one__stats--${playerOne}">${playerOneScore}</span>
         </div>
         <div class="player-two">
           <img class="player-two__image" src="${playerTwoImage}" alt="${playerTwo} player">
-          <span class="player-two__name">${playerTwo}</span>
-          <span class="player-two__stats">${playerTwoScore}</span>
+          <span class="player-two__name player-two__name--${playerTwo}">${playerTwo}</span>
+          <span class="player-two__stats player-two__stats--${playerTwo}">${playerTwoScore}</span>
         </div>
       </div>
       <div class="game__current-player">
         <span class="game__current-player-label">Current player:</span>
         <img class="game__current-player-image" src="${currentPlayerImage}" alt="${currentPlayer} player's turn">
       </div>
-      <div class="game__exit-game">
+      <div class="game__exit-game game__exit-game--${theme}">
         <img class="game__exit-icon" src="src/assets/icons/exit.svg" alt="">
         <span>Exit game</span>
       </div>
@@ -328,7 +326,9 @@ function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
 
         if (currentPlayerImage) {
           currentPlayerImage.src =
-            playerData[currentPlayer as keyof PlayerData].images[settings.theme];
+            playerData[currentPlayer as keyof PlayerData].images[
+              settings.theme
+            ];
           currentPlayerImage.alt = `${currentPlayer} player's turn`;
         }
 
