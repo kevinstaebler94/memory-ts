@@ -353,14 +353,14 @@ function checkGameOver(boardSize: number, theme: ThemeName): void {
     );
     setTimeout(() => {
       if (playerOneScore > playerTwoScore) {
-        renderEndScreen(playerOne);
+        renderEndScreen(playerOne, theme);
       }
       if (playerOneScore < playerTwoScore) {
-        renderEndScreen(playerTwo);
+        renderEndScreen(playerTwo, theme);
       }
       if (playerOneScore === playerTwoScore) {
-        renderEndScreen("draw");
+        renderEndScreen("draw", theme);
       }
-    }, 1500);
+    }, 15000000000000);
   }
 }

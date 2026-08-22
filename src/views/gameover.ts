@@ -46,20 +46,22 @@ function renderGameOverScreen(
   if (!app) return;
 
   app.innerHTML = `
-  <section class="game-over">
+  <section class="game-over game-over--${theme}">
     <div class="game-over__headline-container">
-      <h1 class="game-over__headline">Game Over</h1>
+      <h1 class="game-over__headline game-over__headline--${theme}">Game Over</h1>
     </div>
     <div class="game-over__score-container">
-      <h2 class="game-over__score-title">Final Score</h2>
-      <div class="game-over__players">
-        <div class="game-over__player">
-          <img src="${playerOneImage}" alt="${playerOne} player" class="game-over__image" />
-          <span class="game-over__player-score">${playerOne} ${playerOneScore}</span>
+      <h2 class="game-over__score-title game-over__score-title--${theme}">Final Score</h2>
+      <div class="game-over__players game-over__players--${theme}">
+        <div class="game-over__player game-over__player--${theme}">
+          <img src="${playerOneImage}" alt="${playerOne} player" class="game-over__image game-over__image--${theme}" />
+          <span class="game-over__player-name game-over__player-name--${theme} game-over__player-name--${playerOne}">${playerOne}</span>
+          <span class="game-over__player-score game-over__player-score--${theme} game-over__player-score--${playerOne}">${playerOneScore}</span>
         </div>
-        <div class="game-over__player">
-          <img src="${playerTwoImage}" alt="${playerTwo} player" class="game-over__image" />
-          <span class="game-over__player-score">${playerTwo} ${playerTwoScore}</span>
+        <div class="game-over__player game-over__player--${theme}">
+          <img src="${playerTwoImage}" alt="${playerTwo} player" class="game-over__image game-over__image--${theme}" />
+          <span class="game-over__player-name game-over__player-name--${theme} game-over__player-name--${playerTwo}">${playerTwo}</span>
+          <span class="game-over__player-score game-over__player-score--${theme} game-over__player-score--${playerTwo}">${playerTwoScore}</span>
         </div>
       </div>
     </div>
@@ -67,14 +69,14 @@ function renderGameOverScreen(
         `;
 }
 
-export function renderEndScreen(player: string): void {
+export function renderEndScreen(player: string, theme: ThemeName): void {
   const app = document.querySelector("#app");
   const winningState =
     END_GAME_DATA[player as keyof typeof END_GAME_DATA].image;
   if (!app) return;
   if (player === "draw") {
     app.innerHTML = `
-    <section class="endscreen">
+    <section class="endscreen--${theme}">
       <div class="endscreen__content">
         <span class="endscreen__subheadline">It's a</span>
         <h2 class="endscreen__headline">draw!</h2>
@@ -85,7 +87,7 @@ export function renderEndScreen(player: string): void {
   `;
   } else {
     app.innerHTML = `
-    <section class="endscreen">
+    <section class="endscreen--${theme}">
       <div class="endscreen__content">
         <span class="endscreen__subheadline">The winner is</span>
         <h2 class="endscreen__headline">${player} PLAYER</h2>

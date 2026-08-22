@@ -1,16 +1,75 @@
-.game-over,
-.endscreen {
+.game-over {
   height: 100vh;
   width: 100%;
-  background-color: whitesmoke;
   color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
+  &--code-vibes {
+    background-color: rgb(48, 49, 49);
+  }
+
   &__headline {
-    font-size: 7.5rem;
+    &--code-vibes {
+      font-family: RedRose;
+      font-size: 7.5rem;
+      color: #4dd5bc;
+      text-shadow: -1px -2px 2px #ffffff;
+    }
+  }
+
+  &__score-title {
+    &--code-vibes {
+      font-family: RedRose;
+      font-weight: 400;
+      font-size: 1.5rem;
+      color: whitesmoke;
+      padding-bottom: 2rem;
+      justify-self: center;
+    }
+  }
+
+  &__players {
+    &--code-vibes {
+      display: flex;
+      background-color: #4dd5bc;
+      padding: 0.75rem 0.5rem;
+      background-color: #415652;
+      gap: 1.5rem;
+    }
+  }
+
+  &__player {
+    &--code-vibes {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: RedRose;
+      font-weight: 600;
+
+      gap: 0.25rem;
+    }
+  }
+
+  .game-over {
+    &__player-name,
+    &__player-score {
+      &--orange {
+        color: #f58e39;
+      }
+
+      &--blue {
+        color: #2bb1ff;
+      }
+    }
+  }
+
+  &__player-name {
+    &::first-letter {
+      text-transform: uppercase;
+    }
   }
 }
 
