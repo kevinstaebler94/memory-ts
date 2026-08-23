@@ -5,7 +5,7 @@ type Theme = {
   image: string;
 };
 
-export type ThemeName = "code-vibes" | "gaming" | "da-projects" | "foods";
+export type ThemeName = "code-vibes" | "gaming";
 
 export type GameSettings = {
   theme: ThemeName;
@@ -33,16 +33,6 @@ const THEME_DATA = {
     name: "Gaming",
     image: "/src/assets/images/preview/theme-two.svg",
   },
-
-  "da-projects": {
-    name: "DA Projects",
-    image: "/src/assets/images/preview/theme-three.svg",
-  },
-
-  foods: {
-    name: "Foods",
-    image: "/src/assets/images/preview/theme-four.svg",
-  },
 };
 
 export const PLAYER_DATA: PlayerData = {
@@ -51,8 +41,6 @@ export const PLAYER_DATA: PlayerData = {
     images: {
       "code-vibes": "src/assets/icons/label-blue.svg",
       gaming: "src/assets/icons/chess-blue.svg",
-      "da-projects": "src/assets/icons/chess-blue.svg",
-      foods: "src/assets/icons/chess-blue.svg",
     },
   },
   orange: {
@@ -60,8 +48,6 @@ export const PLAYER_DATA: PlayerData = {
     images: {
       "code-vibes": "src/assets/icons/label-orange.svg",
       gaming: "src/assets/icons/chess-orange.svg",
-      "da-projects": "src/assets/icons/chess-orange.svg",
-      foods: "src/assets/icons/chess-orange.svg",
     },
   },
 };
@@ -101,20 +87,6 @@ export function renderSettings(): void {
                   <input class="settings__input" type="radio" name="theme" value="gaming"/>
                   <span class="settings__radio"></span>
                   <span class="settings__text">Gaming theme</span>
-                </label>
-              </li>
-              <li>
-                <label class="settings__label">
-                  <input class="settings__input" type="radio" name="theme" value="da-projects"/>
-                  <span class="settings__radio"></span>
-                  <span class="settings__text">DA Projects theme</span>
-                </label>
-              </li>
-              <li>
-                <label class="settings__label">
-                  <input class="settings__input" type="radio" name="theme" value="foods"/>
-                  <span class="settings__radio"></span>
-                  <span class="settings__text">Foods theme</span>
                 </label>
               </li>
             </ul>

@@ -48,8 +48,64 @@
       align-items: center;
       font-family: RedRose;
       font-weight: 600;
-
       gap: 0.25rem;
+    }
+  }
+
+  &--gaming {
+    background-color: #294f60;
+  }
+
+  &__headline {
+    &--gaming {
+      font-family: Orbitron;
+      font-size: 7.5rem;
+      color: #ed1b76;
+    }
+  }
+
+  &__score-title {
+    &--gaming {
+      font-family: Orbitron;
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: whitesmoke;
+      justify-self: center;
+      margin: 4rem 0 1rem 0;
+    }
+  }
+
+  &__players {
+    &--gaming {
+      display: flex;
+      justify-content: space-around;
+      background-color: #4dd5bc;
+      padding: 0.5rem 0.75rem;
+      background-color: whitesmoke;
+      gap: 3rem;
+      font-family: Orbitron;
+      border-radius: 5px;
+    }
+  }
+
+  &__player {
+    &--gaming {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      gap: 0.5rem;
+    }
+  }
+
+  &__player-name {
+    &--gaming {
+      display: none;
+    }
+  }
+
+  &__player-score {
+    &--gaming {
+      transform: scale(2);
     }
   }
 
@@ -76,30 +132,217 @@
 .endscreen {
   height: 100vh;
   width: 100%;
-  background-color: whitesmoke;
   color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  &__winner {
-    text-transform: capitalize;
+  &--code-vibes {
+    background-color: #303131;
+
+    .endscreen__content {
+      animation: slideInFromTop 700ms ease-out both;
+    }
+
+    .endscreen__subheadline {
+      font-family: RedRose;
+      font-size: 3rem;
+      color: whitesmoke;
+    }
+
+    .endscreen__headline {
+      font-family: RedRose;
+    }
+
+    .endscreen__restart-button {
+      font-family: RedRose;
+      font-size: 1.5rem;
+      background-color: #415652;
+      border: 1px solid rgba(77, 213, 188, 1);
+      color: whitesmoke;
+      padding: 0.6125rem 1rem;
+
+      &:hover {
+        box-shadow:
+          inset 0 0 0 2px rgba(77, 213, 188, 1),
+          3px 3px 5px rgba(232, 235, 102, 0.25);
+      }
+    }
+  }
+
+  &--code-vibes.endscreen--draw {
+    .endscreen__headline {
+      font-size: 6.5rem;
+      color: #4dd5bc;
+      text-shadow:
+        -2px -2px 1px #ffffff,
+        -3px -3px 4px #4dd5bc;
+    }
+
+    .endscreen__image {
+      transform: scale(0.9);
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &--code-vibes.endscreen--winner {
+    background-image: url("/src/assets/images/gameover/Confetti.svg");
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 100% auto;
+
+    .endscreen__headline {
+      font-size: 4rem;
+
+      &--orange {
+        color: #f58e39;
+      }
+
+      &--blue {
+        color: #2bb1ff;
+      }
+    }
+
+    .endscreen__subheadline {
+      font-size: 1.6125rem;
+      color: whitesmoke;
+    }
+
+    .endscreen__image {
+      transform: scale(0.9);
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &--gaming {
+    background-color: #294f60;
+
+    .endscreen__content {
+      animation: slideInFromBottom 700ms ease-out both;
+    }
+
+    .endscreen__subheadline {
+      font-family: Orbitron;
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: whitesmoke;
+    }
+
+    .endscreen__headline {
+      font-family: Orbitron;
+      font-size: 4rem;
+      color: #e71c4f;
+      text-transform: lowercase;
+      margin-bottom: 3rem;
+
+      &::first-letter {
+        text-transform: lowercase;
+      }
+    }
+
+    .endscreen__restart-button {
+      font-family: Orbitron;
+      font-size: 1.5rem;
+      background-color: #415652;
+      border: 1px solid rgba(77, 213, 188, 1);
+      color: whitesmoke;
+      padding: 0.6125rem 1rem;
+
+      &:hover {
+        box-shadow:
+          inset 0 0 0 2px rgba(77, 213, 188, 1),
+          3px 3px 5px rgba(232, 235, 102, 0.25);
+      }
+    }
+  }
+
+  &--gaming.endscreen--draw {
+    .endscreen__headline {
+      font-size: 6.5rem;
+      color: #e71c4f;
+      text-shadow: 2px 2px 5px #000000;
+    }
+
+    .endscreen__image {
+      transform: scale(0.9);
+      margin-bottom: 1.5rem;
+      filter: brightness(0) saturate(100%) invert(20%) sepia(96%)
+        saturate(4227%) hue-rotate(321deg) brightness(96%) contrast(94%);
+    }
+
+    .endscreen__restart-button {
+      margin-top: 2rem;
+      border: 2px solid #e71c4f;
+      border-radius: 15px;
+
+      &:hover {
+        box-shadow: inset 0 0 0 2px #e71c4f;
+      }
+    }
+  }
+
+  &--gaming.endscreen--winner {
+    .endscreen__headline {
+      font-size: 6.5rem;
+      text-shadow: 2px 2px 5px #000000;
+
+      &--blue {
+        color: #2298db;
+      }
+
+      &--orange {
+        color: #ea6900;
+      }
+    }
+
+    .endscreen__image {
+      transform: scale(0.9);
+      margin-bottom: 1.5rem;
+    }
+
+    .endscreen__restart-button {
+      margin-top: 2rem;
+      border: 2px solid #e71c4f;
+      border-radius: 15px;
+
+      &:hover {
+        box-shadow: inset 0 0 0 2px #e71c4f;
+      }
+    }
   }
 
   &__content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: 1.5rem;
-  }
-
-  &__subheadline {
-    font-size: 5rem;
+    row-gap: 0;
   }
 
   &__headline {
-    font-size: 7.5rem;
     text-transform: uppercase;
+  }
+
+  &__restart-button {
+    cursor: pointer;
+    transition: 200ms ease-in-out;
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(200%);
+  }
+  to {
+    transform: translateY(0);
   }
 }

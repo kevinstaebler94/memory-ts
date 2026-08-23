@@ -29,9 +29,6 @@
     padding-inline: 2rem;
     font-family: RedRose;
 
-    // &--code-vibes {
-    // }
-
     &--gaming {
       background-color: #545d75;
       border-radius: 15px;
@@ -44,6 +41,11 @@
       .player-one__name,
       .player-two__name {
         display: none;
+      }
+
+      .player-one__stats,
+      .player-two__stats {
+        font-size: 2rem;
       }
     }
 
@@ -73,6 +75,8 @@
     gap: 1.5rem;
     padding: 1rem 1.5rem;
     font-size: 1.5rem;
+    font-family: inherit;
+    color: inherit;
     cursor: pointer;
     transition: 200ms ease-in-out;
 
@@ -89,11 +93,15 @@
 
     &--gaming {
       background-color: #605875;
-      border: 3px solid rgba(231, 28, 79, 0.5);
+      border: 2px solid rgba(231, 28, 79, 1);
       border-radius: 15px;
 
       &:hover {
-        border-color: rgba(231, 28, 79, 1);
+        box-shadow: inset 0 0 0 2px rgba(231, 28, 79, 1);
+
+        .game__exit-icon {
+          background-image: url("/src/assets/icons/exit-hover.svg");
+        }
       }
     }
 
@@ -112,6 +120,18 @@
         border-color: rgba(231, 28, 79, 1);
       }
     }
+  }
+
+  &__exit-icon {
+    display: block;
+    width: 26px;
+    height: 23px;
+    flex-shrink: 0;
+    background-image: url("/src/assets/icons/exit.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: 200ms ease-in-out;
   }
 
   &__board {
@@ -186,7 +206,7 @@
 .player-two__name--orange,
 .player-one__stats--orange,
 .player-two__stats--orange {
-  color: #f58e39;
+  color: #ea6900;
 }
 
 .player-one__name--blue,

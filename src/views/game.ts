@@ -51,54 +51,54 @@ export const THEME_DATA = {
     ],
     front: "src/assets/images/themes/gaming/front.svg",
   },
-  "da-projects": {
-    name: "DA-Projects",
-    images: [
-      "src/assets/images/themes/da-projects/broth.svg",
-      "src/assets/images/themes/da-projects/chef.svg",
-      "src/assets/images/themes/da-projects/coins.svg",
-      "src/assets/images/themes/da-projects/contact.svg",
-      "src/assets/images/themes/da-projects/cuisine.svg",
-      "src/assets/images/themes/da-projects/da-bubble.svg",
-      "src/assets/images/themes/da-projects/eggs.svg",
-      "src/assets/images/themes/da-projects/greater-than.svg",
-      "src/assets/images/themes/da-projects/join.svg",
-      "src/assets/images/themes/da-projects/lieferando.svg",
-      "src/assets/images/themes/da-projects/pokeball.svg",
-      "src/assets/images/themes/da-projects/pollapp.svg",
-      "src/assets/images/themes/da-projects/ramen.svg",
-      "src/assets/images/themes/da-projects/sakura.svg",
-      "src/assets/images/themes/da-projects/smiley.svg",
-      "src/assets/images/themes/da-projects/sombrero.svg",
-      "src/assets/images/themes/da-projects/tic-tac-toe.svg",
-      "src/assets/images/themes/da-projects/wave.svg",
-    ],
-    front: "src/assets/images/themes/da-projects/front.svg",
-  },
-  foods: {
-    name: "Foods",
-    images: [
-      "src/assets/images/themes/foods/burger.svg",
-      "src/assets/images/themes/foods/cake.svg",
-      "src/assets/images/themes/foods/chocolate.svg",
-      "src/assets/images/themes/foods/corndog.svg",
-      "src/assets/images/themes/foods/cupcake.svg",
-      "src/assets/images/themes/foods/donut.svg",
-      "src/assets/images/themes/foods/fried-chicken.svg",
-      "src/assets/images/themes/foods/fries.svg",
-      "src/assets/images/themes/foods/ice-cream.svg",
-      "src/assets/images/themes/foods/macarons.svg",
-      "src/assets/images/themes/foods/pizza.svg",
-      "src/assets/images/themes/foods/pretzel.svg",
-      "src/assets/images/themes/foods/pudding.svg",
-      "src/assets/images/themes/foods/salad.svg",
-      "src/assets/images/themes/foods/sandwich.svg",
-      "src/assets/images/themes/foods/sushi.svg",
-      "src/assets/images/themes/foods/taco.svg",
-      "src/assets/images/themes/foods/wrap.svg",
-    ],
-    front: "src/assets/images/themes/foods/front.svg",
-  },
+  // "da-projects": {
+  //   name: "DA-Projects",
+  //   images: [
+  //     "src/assets/images/themes/da-projects/broth.svg",
+  //     "src/assets/images/themes/da-projects/chef.svg",
+  //     "src/assets/images/themes/da-projects/coins.svg",
+  //     "src/assets/images/themes/da-projects/contact.svg",
+  //     "src/assets/images/themes/da-projects/cuisine.svg",
+  //     "src/assets/images/themes/da-projects/da-bubble.svg",
+  //     "src/assets/images/themes/da-projects/eggs.svg",
+  //     "src/assets/images/themes/da-projects/greater-than.svg",
+  //     "src/assets/images/themes/da-projects/join.svg",
+  //     "src/assets/images/themes/da-projects/lieferando.svg",
+  //     "src/assets/images/themes/da-projects/pokeball.svg",
+  //     "src/assets/images/themes/da-projects/pollapp.svg",
+  //     "src/assets/images/themes/da-projects/ramen.svg",
+  //     "src/assets/images/themes/da-projects/sakura.svg",
+  //     "src/assets/images/themes/da-projects/smiley.svg",
+  //     "src/assets/images/themes/da-projects/sombrero.svg",
+  //     "src/assets/images/themes/da-projects/tic-tac-toe.svg",
+  //     "src/assets/images/themes/da-projects/wave.svg",
+  //   ],
+  //   front: "src/assets/images/themes/da-projects/front.svg",
+  // },
+  // foods: {
+  //   name: "Foods",
+  //   images: [
+  //     "src/assets/images/themes/foods/burger.svg",
+  //     "src/assets/images/themes/foods/cake.svg",
+  //     "src/assets/images/themes/foods/chocolate.svg",
+  //     "src/assets/images/themes/foods/corndog.svg",
+  //     "src/assets/images/themes/foods/cupcake.svg",
+  //     "src/assets/images/themes/foods/donut.svg",
+  //     "src/assets/images/themes/foods/fried-chicken.svg",
+  //     "src/assets/images/themes/foods/fries.svg",
+  //     "src/assets/images/themes/foods/ice-cream.svg",
+  //     "src/assets/images/themes/foods/macarons.svg",
+  //     "src/assets/images/themes/foods/pizza.svg",
+  //     "src/assets/images/themes/foods/pretzel.svg",
+  //     "src/assets/images/themes/foods/pudding.svg",
+  //     "src/assets/images/themes/foods/salad.svg",
+  //     "src/assets/images/themes/foods/sandwich.svg",
+  //     "src/assets/images/themes/foods/sushi.svg",
+  //     "src/assets/images/themes/foods/taco.svg",
+  //     "src/assets/images/themes/foods/wrap.svg",
+  //   ],
+  //   front: "src/assets/images/themes/foods/front.svg",
+  // },
 };
 
 let playerOne: string = "";
@@ -108,6 +108,7 @@ let playerOneScore = 0;
 let playerTwoScore = 0;
 
 export function initGame(settings: GameSettings, playerData: PlayerData): void {
+  resetGameState();
   renderGame(settings, playerData);
 }
 
@@ -217,10 +218,10 @@ function renderHeaderHTML(
         <span class="game__current-player-label">Current player:</span>
         <img class="game__current-player-image" src="${currentPlayerImage}" alt="${currentPlayer} player's turn">
       </div>
-      <div class="game__exit-game game__exit-game--${theme}">
-        <img class="game__exit-icon" src="src/assets/icons/exit.svg" alt="">
+      <button class="game__exit-game game__exit-game--${theme}" type="button">
+        <span class="game__exit-icon" aria-hidden="true"></span>
         <span>Exit game</span>
-      </div>
+      </button>
     </header>`;
 }
 
@@ -343,7 +344,7 @@ function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
 function checkGameOver(boardSize: number, theme: ThemeName): void {
   const matchedCards = document.querySelectorAll(".game__card.is-matched");
 
-  if (matchedCards.length === boardSize) {
+  if (matchedCards.length === 4) {
     initGameOverScreen(
       playerOne,
       playerOneScore,
@@ -361,6 +362,14 @@ function checkGameOver(boardSize: number, theme: ThemeName): void {
       if (playerOneScore === playerTwoScore) {
         renderEndScreen("draw", theme);
       }
-    }, 15000000000000);
+    }, 2000);
   }
+}
+
+function resetGameState(): void {
+  playerOne = "";
+  playerTwo = "";
+  currentPlayer = "";
+  playerOneScore = 0;
+  playerTwoScore = 0;
 }
