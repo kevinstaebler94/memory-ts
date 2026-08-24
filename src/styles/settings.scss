@@ -197,23 +197,21 @@
   }
 
   &__text {
-    position: relative;
-    display: inline-block;
-    width: 190px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-family: "Almarai";
     line-height: 1.2;
+    white-space: nowrap;
   }
 
   &__label:hover &__text::after {
     content: "";
-    position: absolute;
+    flex: 0 0 60px;
+    width: 60px;
+    height: 16px;
     background-image: url("../../src/assets/icons/yellow-line.svg");
     background-repeat: no-repeat;
     background-size: contain;
-    height: 16px;
-    width: 60px;
-    top: 50%;
-    left: calc(100% + 10px);
-    transform: translateY(-50%);
   }
 }

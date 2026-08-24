@@ -31,11 +31,11 @@
 
     &--gaming {
       background-color: #545d75;
-      border-radius: 15px;
+      border-radius: 12px;
 
       .game__player-container {
         background-color: #ffffff;
-        border-radius: 15px;
+        border-radius: 12px;
       }
 
       .player-one__name,
@@ -63,9 +63,52 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.25rem;
     font-size: 1.5rem;
     background-color: #415652;
+  }
+
+  &__current-player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 2rem;
+  }
+
+  &__current-player-image {
+    display: block;
+    object-fit: contain;
+
+    &--theme-code-vibes {
+      width: 29px;
+      height: 24px;
+    }
+
+    &--theme-gaming {
+      width: 20px;
+      height: 25px;
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  &__current-player-figure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--theme-gaming {
+      width: 32px;
+      height: 32px;
+
+      &.game__current-player-figure--player-blue {
+        background-color: #097fc5;
+      }
+
+      &.game__current-player-figure--player-orange {
+        background-color: #ea6900;
+      }
+    }
   }
 
   &__exit-game {
@@ -73,7 +116,7 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.25rem;
     font-size: 1.5rem;
     font-family: inherit;
     color: inherit;
@@ -93,8 +136,8 @@
 
     &--gaming {
       background-color: #605875;
-      border: 2px solid rgba(231, 28, 79, 1);
-      border-radius: 15px;
+      border: 3px solid rgba(231, 28, 79, 1);
+      border-radius: 12px;
 
       &:hover {
         box-shadow: inset 0 0 0 2px rgba(231, 28, 79, 1);
@@ -134,10 +177,16 @@
     transition: 200ms ease-in-out;
   }
 
+  &__board-container {
+    position: relative;
+    width: fit-content;
+    margin: 3rem auto 0;
+  }
+
   &__board {
     display: grid;
     width: fit-content;
-    margin: 3rem auto 0;
+    margin: 0;
 
     &--16 {
       grid-template-columns: repeat(4, 1fr);
@@ -213,13 +262,75 @@
 .player-two__name--blue,
 .player-one__stats--blue,
 .player-two__stats--blue {
-  color: #2bb1ff;
+  color: #097fc5;
 }
 
-.game__current-player {
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 555px;
+  aspect-ratio: 2 / 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.725rem;
+  justify-content: space-evenly;
+
+  &__buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__button-left,
+  &__button-right {
+    font-size: 1.25rem;
+    padding: 0.6125rem 1rem;
+    cursor: pointer;
+  }
+
+  &--code-vibes {
+    background-color: #ffffff;
+
+    .overlay__text {
+      font-family: RedRose;
+      font-weight: 700;
+      font-size: 2.25rem;
+      color: #303131;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+
+    .overlay__button-left {
+      font-family: RedRose;
+      font-weight: 700;
+      color: #ffffff;
+      background-color: #66cfbc;
+      border: 2px solid #66cfbc;
+
+      &:hover {
+        background-color: rgba(102, 207, 188, 0.7);
+        box-shadow: inset 0 0 2px #66cfbc;
+      }
+    }
+
+    .overlay__button-right {
+      font-family: RedRose;
+      font-weight: 700;
+      color: #66cfbc;
+      background-color: #eefcf9;
+      border: 2px solid #66cfbc;
+
+      &:hover {
+        box-shadow:
+          inset 0 0 2px #66cfbc,
+          0 1px 5px #66cfbc;
+      }
+    }
+  }
+
+  &--gaming {
+    background: rgb(77, 53, 53);
+  }
 }

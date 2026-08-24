@@ -51,54 +51,6 @@ export const THEME_DATA = {
     ],
     front: "src/assets/images/themes/gaming/front.svg",
   },
-  // "da-projects": {
-  //   name: "DA-Projects",
-  //   images: [
-  //     "src/assets/images/themes/da-projects/broth.svg",
-  //     "src/assets/images/themes/da-projects/chef.svg",
-  //     "src/assets/images/themes/da-projects/coins.svg",
-  //     "src/assets/images/themes/da-projects/contact.svg",
-  //     "src/assets/images/themes/da-projects/cuisine.svg",
-  //     "src/assets/images/themes/da-projects/da-bubble.svg",
-  //     "src/assets/images/themes/da-projects/eggs.svg",
-  //     "src/assets/images/themes/da-projects/greater-than.svg",
-  //     "src/assets/images/themes/da-projects/join.svg",
-  //     "src/assets/images/themes/da-projects/lieferando.svg",
-  //     "src/assets/images/themes/da-projects/pokeball.svg",
-  //     "src/assets/images/themes/da-projects/pollapp.svg",
-  //     "src/assets/images/themes/da-projects/ramen.svg",
-  //     "src/assets/images/themes/da-projects/sakura.svg",
-  //     "src/assets/images/themes/da-projects/smiley.svg",
-  //     "src/assets/images/themes/da-projects/sombrero.svg",
-  //     "src/assets/images/themes/da-projects/tic-tac-toe.svg",
-  //     "src/assets/images/themes/da-projects/wave.svg",
-  //   ],
-  //   front: "src/assets/images/themes/da-projects/front.svg",
-  // },
-  // foods: {
-  //   name: "Foods",
-  //   images: [
-  //     "src/assets/images/themes/foods/burger.svg",
-  //     "src/assets/images/themes/foods/cake.svg",
-  //     "src/assets/images/themes/foods/chocolate.svg",
-  //     "src/assets/images/themes/foods/corndog.svg",
-  //     "src/assets/images/themes/foods/cupcake.svg",
-  //     "src/assets/images/themes/foods/donut.svg",
-  //     "src/assets/images/themes/foods/fried-chicken.svg",
-  //     "src/assets/images/themes/foods/fries.svg",
-  //     "src/assets/images/themes/foods/ice-cream.svg",
-  //     "src/assets/images/themes/foods/macarons.svg",
-  //     "src/assets/images/themes/foods/pizza.svg",
-  //     "src/assets/images/themes/foods/pretzel.svg",
-  //     "src/assets/images/themes/foods/pudding.svg",
-  //     "src/assets/images/themes/foods/salad.svg",
-  //     "src/assets/images/themes/foods/sandwich.svg",
-  //     "src/assets/images/themes/foods/sushi.svg",
-  //     "src/assets/images/themes/foods/taco.svg",
-  //     "src/assets/images/themes/foods/wrap.svg",
-  //   ],
-  //   front: "src/assets/images/themes/foods/front.svg",
-  // },
 };
 
 let playerOne: string = "";
@@ -142,7 +94,10 @@ function renderGameHTML(settings: GameSettings, playerData: PlayerData): void {
   app.innerHTML = `
   <div id="game" class="game game--${settings.theme}">
     ${renderHeader(settings, playerData)}
-    <main id="board" class="game__board game__board--${settings.board}"></main>
+    <div class="game__board-container">
+      <main id="board" class="game__board game__board--${settings.board}"></main>
+      ${renderOverlayHTML(settings.theme)}
+    </div>
   </div>
   `;
 }
@@ -215,14 +170,28 @@ function renderHeaderHTML(
         </div>
       </div>
       <div class="game__current-player">
-        <span class="game__current-player-label">Current player:</span>
-        <img class="game__current-player-image" src="${currentPlayerImage}" alt="${currentPlayer} player's turn">
+        <span class="game__current-player-label game__current-player-label--${theme}">Current player:</span>
+        <span class="game__current-player-figure game__current-player-figure--theme-${theme} game__current-player-figure--player-${currentPlayer}">
+          <img class="game__current-player-image game__current-player-image--theme-${theme}" src="${currentPlayerImage}" alt="${currentPlayer} player's turn">
+        </span>
       </div>
       <button class="game__exit-game game__exit-game--${theme}" type="button">
         <span class="game__exit-icon" aria-hidden="true"></span>
         <span>Exit game</span>
       </button>
     </header>`;
+}
+
+function renderOverlayHTML(theme: ThemeName): string {
+  return `
+    <div id="overlay" class="overlay overlay--${theme}">
+      <p class="overlay__text overlay__text--${theme}">Do you really want to exit the game?</p>
+      <div class="overlay__buttons overlay__buttons--${theme}">
+        <button class="overlay__button-left overlay__button-left--${theme}" type="button">Back to game</button>
+        <button class="overlay__button-right overlay__button-right--${theme}" type="button">Exit game</button>
+      </div>
+    </div>
+  `;
 }
 
 function updateCardVisibility(card: HTMLDivElement) {
@@ -331,6 +300,18 @@ function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
               settings.theme
             ];
           currentPlayerImage.alt = `${currentPlayer} player's turn`;
+
+          const currentPlayerFigure = currentPlayerImage.closest(
+            ".game__current-player-figure",
+          );
+
+          currentPlayerFigure?.classList.remove(
+            "game__current-player-figure--player-blue",
+            "game__current-player-figure--player-orange",
+          );
+          currentPlayerFigure?.classList.add(
+            `game__current-player-figure--player-${currentPlayer}`,
+          );
         }
 
         firstCard = null;
