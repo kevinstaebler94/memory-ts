@@ -1,4 +1,5 @@
 import type { GameSettings, PlayerData, ThemeName } from "./settings";
+import { initSettings } from "./settings";
 import { initGameOverScreen } from "./gameover";
 import { renderEndScreen } from "./gameover";
 
@@ -62,6 +63,8 @@ let playerTwoScore = 0;
 export function initGame(settings: GameSettings, playerData: PlayerData): void {
   resetGameState();
   renderGame(settings, playerData);
+  handleExitGame();
+  handleOverlayButtons();
 }
 
 function renderGame(settings: GameSettings, playerData: PlayerData): void {
@@ -175,7 +178,7 @@ function renderHeaderHTML(
           <img class="game__current-player-image game__current-player-image--theme-${theme}" src="${currentPlayerImage}" alt="${currentPlayer} player's turn">
         </span>
       </div>
-      <button class="game__exit-game game__exit-game--${theme}" type="button">
+      <button id="exitButton" class="game__exit-game game__exit-game--${theme}" type="button">
         <span class="game__exit-icon" aria-hidden="true"></span>
         <span>Exit game</span>
       </button>
@@ -184,13 +187,16 @@ function renderHeaderHTML(
 
 function renderOverlayHTML(theme: ThemeName): string {
   return `
-    <div id="overlay" class="overlay overlay--${theme}">
+  <section id="overlayWrapper" class="overlay__wrapper dNone">
+    <div class="overlay overlay--${theme}">
       <p class="overlay__text overlay__text--${theme}">Do you really want to exit the game?</p>
       <div class="overlay__buttons overlay__buttons--${theme}">
-        <button class="overlay__button-left overlay__button-left--${theme}" type="button">Back to game</button>
-        <button class="overlay__button-right overlay__button-right--${theme}" type="button">Exit game</button>
+        <button
+        id="backToGame" class="overlay__button-left overlay__button-left--${theme}" type="button">Back to game</button>
+        <button id="exitGame" class="overlay__button-right overlay__button-right--${theme}" type="button">Exit game</button>
       </div>
     </div>
+  </section>
   `;
 }
 
@@ -353,4 +359,42 @@ function resetGameState(): void {
   currentPlayer = "";
   playerOneScore = 0;
   playerTwoScore = 0;
+}
+
+function handleExitGame(): void {
+  const exitButton = document.querySelector<HTMLButtonElement>("#exitButton");
+
+  if (!exitButton) return;
+
+  exitButton.addEventListener("click", toggleOverlay);
+}
+
+function toggleOverlay(): void {
+  const overlayWrapper = document.querySelector<HTMLElement>("#overlayWrapper");
+
+  if (!overlayWrapper) return;
+
+  overlayWrapper.classList.toggle("dNone");
+}
+
+function handleOverlayButtons(): void {
+  const overlayWrapper = document.querySelector<HTMLElement>("#overlayWrapper");
+  const overlay = overlayWrapper?.querySelector<HTMLElement>(".overlay");
+  const backToGame = document.querySelector<HTMLButtonElement>("#backToGame");
+  const exitGame = document.querySelector<HTMLButtonElement>("#exitGame");
+
+  if (!overlayWrapper || !overlay || !backToGame || !exitGame) return;
+
+  overlayWrapper.addEventListener("click", toggleOverlay);
+
+  overlay.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  backToGame.addEventListener("click", toggleOverlay);
+
+  exitGame.addEventListener("click", () => {
+    resetGameState();
+    initSettings();
+  });
 }
