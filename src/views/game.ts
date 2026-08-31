@@ -95,13 +95,14 @@ function renderGameHTML(settings: GameSettings, playerData: PlayerData): void {
   if (!app) return;
 
   app.innerHTML = `
-  <div id="game" class="game game--${settings.theme}">
+  <section id="game" class="game game--${settings.theme}" aria-labelledby="game-title">
+    <h1 id="game-title" class="visually-hidden">Memory game</h1>
     ${renderHeader(settings, playerData)}
     <div class="game__board-container">
-      <main id="board" class="game__board game__board--${settings.board}"></main>
+      <section id="board" class="game__board game__board--${settings.board}" aria-label="Memory card board"></section>
       ${renderOverlayHTML(settings.theme)}
     </div>
-  </div>
+  </section>
   `;
 }
 
@@ -113,10 +114,10 @@ function renderBoardHTML(cardsCover: string, gameCards: string[]): void {
 
   for (let i = 0; i < gameCards.length; i++) {
     boardHTML += `
-      <div class="game__card">
+      <button class="game__card" type="button" aria-label="Turn over memory card ${i + 1}">
         <img class="game__card-cover" src="${cardsCover}" alt="Face-down memory card">
-        <img class="game__card-image" src="${gameCards[i]}" alt="Memory card image">
-      </div>
+        <img class="game__card-image" src="${gameCards[i]}" alt="Memory card ${i + 1}">
+      </button>
     `;
   }
   board.innerHTML = boardHTML;
@@ -187,20 +188,20 @@ function renderHeaderHTML(
 
 function renderOverlayHTML(theme: ThemeName): string {
   return `
-  <section id="overlayWrapper" class="overlay__wrapper dNone">
-    <div class="overlay overlay--${theme}">
-      <p class="overlay__text overlay__text--${theme}">Do you really want to exit the game?</p>
+  <div id="overlayWrapper" class="overlay__wrapper dNone">
+    <section class="overlay overlay--${theme}" role="dialog" aria-modal="true" aria-labelledby="exit-dialog-title">
+      <h2 id="exit-dialog-title" class="overlay__text overlay__text--${theme}">Do you really want to exit the game?</h2>
       <div class="overlay__buttons overlay__buttons--${theme}">
         <button
         id="backToGame" class="overlay__button-left overlay__button-left--${theme}" type="button">Back to game</button>
         <button id="exitGame" class="overlay__button-right overlay__button-right--${theme}" type="button">Exit game</button>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
   `;
 }
 
-function updateCardVisibility(card: HTMLDivElement) {
+function updateCardVisibility(card: HTMLButtonElement) {
   const cover = card.querySelector<HTMLImageElement>(".game__card-cover");
   const image = card.querySelector<HTMLImageElement>(".game__card-image");
 
@@ -218,10 +219,10 @@ function updateCardVisibility(card: HTMLDivElement) {
 function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
   let isChecking = false;
 
-  const cards = document.querySelectorAll<HTMLDivElement>(".game__card");
+  const cards = document.querySelectorAll<HTMLButtonElement>(".game__card");
 
-  let firstCard: HTMLDivElement | null = null;
-  let secondCard: HTMLDivElement | null = null;
+  let firstCard: HTMLButtonElement | null = null;
+  let secondCard: HTMLButtonElement | null = null;
 
   cards.forEach((card) => {
     card.addEventListener("click", () => {
@@ -371,10 +372,28 @@ function handleExitGame(): void {
 
 function toggleOverlay(): void {
   const overlayWrapper = document.querySelector<HTMLElement>("#overlayWrapper");
+  const overlay = overlayWrapper?.querySelector<HTMLElement>(".overlay");
 
-  if (!overlayWrapper) return;
+  if (!overlayWrapper || !overlay) return;
 
-  overlayWrapper.classList.toggle("dNone");
+  const isHidden = overlayWrapper.classList.contains("dNone");
+
+  if (isHidden) {
+    overlay.classList.remove("is-closing");
+    overlayWrapper.classList.remove("dNone");
+    return;
+  }
+
+  overlay.classList.add("is-closing");
+
+  overlay.addEventListener(
+    "animationend",
+    () => {
+      overlayWrapper.classList.add("dNone");
+      overlay.classList.remove("is-closing");
+    },
+    { once: true },
+  );
 }
 
 function handleOverlayButtons(): void {

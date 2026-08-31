@@ -66,12 +66,12 @@ export function renderSettings(): void {
   if (!app) return;
 
   app.innerHTML = `
-    <div class="settings">
+    <section class="settings" aria-labelledby="settings-title">
         <div class="settings__left">
-          <h1 class="settings__headline">Settings</h1>
+          <h1 id="settings-title" class="settings__headline">Settings</h1>
           <section class="settings__section settings__themes">
             <div class="settings__section-container">
-              <img src="src/assets/icons/theme.svg" alt="Game themes" />
+              <img src="src/assets/icons/theme.svg" alt="" />
               <h2 class="settings__section-title">Game themes</h2>
             </div>
             <ul class="settings__list">
@@ -93,7 +93,7 @@ export function renderSettings(): void {
           </section>
           <section class="settings__section settings__player">
             <div class="settings__section-container">
-              <img src="src/assets/icons/player.svg" alt="Player selection" />
+              <img src="src/assets/icons/player.svg" alt="" />
               <h2 class="settings__section-title">Choose player</h2>
             </div>
             <ul class="settings__list">
@@ -115,7 +115,7 @@ export function renderSettings(): void {
           </section>
           <section class="settings__section settings__board">
             <div class="settings__section-container">
-              <img src="src/assets/icons/board.svg" alt="Board size" />
+              <img src="src/assets/icons/board.svg" alt="" />
               <h2 class="settings__section-title">Board size</h2>
             </div>
             <ul class="settings__list">
@@ -144,11 +144,11 @@ export function renderSettings(): void {
           </section>
         </div>
         <div class="settings__right">
-          <section class="settings__game-preview">
+          <figure class="settings__game-preview">
             <div class="settings__preview-container">
               <img class="settings__preview-image" src="src/assets/images/preview/theme-one.svg" alt="Preview of the selected game theme" />
             </div>
-            <div class="settings__preview-bar">
+            <figcaption class="settings__preview-bar">
               <div class="settings__preview-item">
                 <span class="settings__preview-theme">Game theme</span>
               </div>
@@ -161,14 +161,14 @@ export function renderSettings(): void {
                 <span class="settings__preview-board">Board size</span>
               </div>
 
-              <button class="settings__play-button" disabled>
+              <button class="settings__play-button" type="button" disabled>
                 <img class="settings__play-icon" src="src/assets/icons/play-icon.svg" alt="" />
                 <span>Start</span>
               </button>
-            </div>
-          </section>
+            </figcaption>
+          </figure>
         </div>
-      </div>
+      </section>
   `;
 }
 

@@ -12,10 +12,10 @@ function renderHome(): void {
   app.innerHTML = `
     <section class="home">
         <div class="home__container">
-          <h1 class="home__subtitle">It's play time.</h1>
-          <h2 class="home__title">Ready to play?</h2>
+          <p class="home__subtitle">It's play time.</p>
+          <h1 class="home__title">Ready to play?</h1>
         </div>
-        <button class="home__play-button">
+        <button class="home__play-button" type="button">
           <img
             class="home__play-icon"
             src="src/assets/icons/controller.svg"

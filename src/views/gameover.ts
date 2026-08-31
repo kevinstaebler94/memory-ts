@@ -102,21 +102,21 @@ function renderGameOverScreen(
     <div class="game-over__headline-container">
       <h1 class="game-over__headline game-over__headline--${theme}">Game Over</h1>
     </div>
-    <div class="game-over__score-container">
-      <h2 class="game-over__score-title game-over__score-title--${theme}">Final Score</h2>
+    <section class="game-over__score-container" aria-labelledby="final-score-title">
+      <h2 id="final-score-title" class="game-over__score-title game-over__score-title--${theme}">Final Score</h2>
       <div class="game-over__players game-over__players--${theme}">
-        <div class="game-over__player game-over__player--${theme}">
+        <article class="game-over__player game-over__player--${theme}" aria-label="${playerOne} player's final score">
           <img src="${playerOneImage}" alt="${playerOne} player" class="game-over__image game-over__image--${theme}" />
           <span class="game-over__player-name game-over__player-name--${theme} game-over__player-name--${playerOne}">${playerOne}</span>
           <span class="game-over__player-score game-over__player-score--${theme} game-over__player-score--${playerOne}">${playerOneScore}</span>
-        </div>
-        <div class="game-over__player game-over__player--${theme}">
+        </article>
+        <article class="game-over__player game-over__player--${theme}" aria-label="${playerTwo} player's final score">
           <img src="${playerTwoImage}" alt="${playerTwo} player" class="game-over__image game-over__image--${theme}" />
           <span class="game-over__player-name game-over__player-name--${theme} game-over__player-name--${playerTwo}">${playerTwo}</span>
           <span class="game-over__player-score game-over__player-score--${theme} game-over__player-score--${playerTwo}">${playerTwoScore}</span>
-        </div>
+        </article>
       </div>
-    </div>
+    </section>
   </section>
         `;
 }
@@ -133,10 +133,10 @@ export function renderEndScreen(player: string, theme: ThemeName): void {
     app.innerHTML = `
     <section class="endscreen endscreen--${theme} endscreen--${resultType}">
       <div class="endscreen__content">
-        <span class="endscreen__subheadline endscreen__subheadline--${theme} endscreen__subheadline--${resultType}">It's a</span>
-        <h2 class="endscreen__headline endscreen__headline--${theme} endscreen__headline--${resultType} endscreen__headline--${player}">draw</h2>
+        <p class="endscreen__subheadline endscreen__subheadline--${theme} endscreen__subheadline--${resultType}">It's a</p>
+        <h1 class="endscreen__headline endscreen__headline--${theme} endscreen__headline--${resultType} endscreen__headline--${player}">draw</h1>
         <img class="endscreen__image endscreen__image--${theme} endscreen__image--${resultType}" src="${winningState}" alt="The game ended in a draw" />
-        <button class="endscreen__restart-button endscreen__restart-button--${theme}">${restartButtonLabel}</button>
+        <button class="endscreen__restart-button endscreen__restart-button--${theme}" type="button">${restartButtonLabel}</button>
       </div>
     </section>
   `;
@@ -144,10 +144,10 @@ export function renderEndScreen(player: string, theme: ThemeName): void {
     app.innerHTML = `
     <section class="endscreen endscreen--${theme} endscreen--${resultType}">
       <div class="endscreen__content">
-        <span class="endscreen__subheadline endscreen__subheadline--${theme} endscreen__subheadline--${resultType}">The winner is</span>
-        <h2 class="endscreen__headline endscreen__headline--${theme} endscreen__headline--${resultType} endscreen__headline--${player}">${player} PLAYER</h2>
+        <p class="endscreen__subheadline endscreen__subheadline--${theme} endscreen__subheadline--${resultType}">The winner is</p>
+        <h1 class="endscreen__headline endscreen__headline--${theme} endscreen__headline--${resultType} endscreen__headline--${player}">${player} PLAYER</h1>
         <img class="endscreen__image endscreen__image--${theme} endscreen__image--${resultType}" src="${winningState}" alt="${player} player wins" />
-        <button class="endscreen__restart-button endscreen__restart-button--${theme}">${restartButtonLabel}</button>
+        <button class="endscreen__restart-button endscreen__restart-button--${theme}" type="button">${restartButtonLabel}</button>
       </div>
     </section>
   `;
