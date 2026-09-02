@@ -2,57 +2,12 @@ import type { GameSettings, PlayerData, ThemeName } from "./settings";
 import { initSettings } from "./settings";
 import { initGameOverScreen } from "./gameover";
 import { renderEndScreen } from "./gameover";
-
-export const THEME_DATA = {
-  "code-vibes": {
-    name: "Code vibes",
-    images: [
-      "src/assets/images/themes/code-vibes/angular.svg",
-      "src/assets/images/themes/code-vibes/bootstrap.svg",
-      "src/assets/images/themes/code-vibes/css.svg",
-      "src/assets/images/themes/code-vibes/django.svg",
-      "src/assets/images/themes/code-vibes/firebase.svg",
-      "src/assets/images/themes/code-vibes/git.svg",
-      "src/assets/images/themes/code-vibes/github.svg",
-      "src/assets/images/themes/code-vibes/html.svg",
-      "src/assets/images/themes/code-vibes/js.svg",
-      "src/assets/images/themes/code-vibes/node-js.svg",
-      "src/assets/images/themes/code-vibes/python.svg",
-      "src/assets/images/themes/code-vibes/react.svg",
-      "src/assets/images/themes/code-vibes/sass.svg",
-      "src/assets/images/themes/code-vibes/sql.svg",
-      "src/assets/images/themes/code-vibes/terminal.svg",
-      "src/assets/images/themes/code-vibes/ts.svg",
-      "src/assets/images/themes/code-vibes/vsc.svg",
-      "src/assets/images/themes/code-vibes/vue.svg",
-    ],
-    front: "src/assets/images/themes/code-vibes/front.svg",
-  },
-  gaming: {
-    name: "Gaming",
-    images: [
-      "src/assets/images/themes/gaming/1up.svg",
-      "src/assets/images/themes/gaming/banana.svg",
-      "src/assets/images/themes/gaming/card.svg",
-      "src/assets/images/themes/gaming/circle.svg",
-      "src/assets/images/themes/gaming/coin.svg",
-      "src/assets/images/themes/gaming/controller.svg",
-      "src/assets/images/themes/gaming/dice.svg",
-      "src/assets/images/themes/gaming/gameboy.svg",
-      "src/assets/images/themes/gaming/levelup.svg",
-      "src/assets/images/themes/gaming/maze.svg",
-      "src/assets/images/themes/gaming/minecraft.svg",
-      "src/assets/images/themes/gaming/pacman.svg",
-      "src/assets/images/themes/gaming/pacman2.svg",
-      "src/assets/images/themes/gaming/play.svg",
-      "src/assets/images/themes/gaming/puzzle.svg",
-      "src/assets/images/themes/gaming/snake.svg",
-      "src/assets/images/themes/gaming/square.svg",
-      "src/assets/images/themes/gaming/triangle.svg",
-    ],
-    front: "src/assets/images/themes/gaming/front.svg",
-  },
-};
+import { THEME_DATA } from "./game-data";
+import {
+  createBoardHtml,
+  createGameHtml,
+  createHeaderHtml,
+} from "./game-html";
 
 type CardGameState = {
   firstCard: HTMLButtonElement | null;
@@ -100,36 +55,17 @@ function renderGameHTML(settings: GameSettings, playerData: PlayerData): void {
 
   if (!app) return;
 
-  app.innerHTML = `
-  <section id="game" class="game game--${settings.theme}" aria-labelledby="game-title">
-    <h1 id="game-title" class="visually-hidden">Memory game</h1>
-    ${renderHeader(settings, playerData)}
-    <div class="game__board-container">
-      <section id="board" class="game__board game__board--${settings.board}" aria-label="Memory card board"></section>
-      ${renderOverlayHTML(settings.theme)}
-    </div>
-  </section>
-  `;
+  app.innerHTML = createGameHtml(settings, createHeader(settings, playerData));
 }
 
 function renderBoardHTML(cardsCover: string, gameCards: string[]): void {
   const board = document.querySelector("#board");
-  let boardHTML = "";
-
   if (!board) return;
 
-  for (let i = 0; i < gameCards.length; i++) {
-    boardHTML += `
-      <button class="game__card" type="button" aria-label="Turn over memory card ${i + 1}">
-        <img class="game__card-cover" src="${cardsCover}" alt="Face-down memory card">
-        <img class="game__card-image" src="${gameCards[i]}" alt="Memory card ${i + 1}">
-      </button>
-    `;
-  }
-  board.innerHTML = boardHTML;
+  board.innerHTML = createBoardHtml(cardsCover, gameCards);
 }
 
-function renderHeader(settings: GameSettings, playerData: PlayerData): string {
+function createHeader(settings: GameSettings, playerData: PlayerData): string {
   playerOne = settings.player;
 
   if (playerOne === "orange") {
@@ -148,63 +84,17 @@ function renderHeader(settings: GameSettings, playerData: PlayerData): string {
   const currentPlayerImage =
     playerData[currentPlayer as keyof PlayerData].images[settings.theme];
 
-  return renderHeaderHTML(
+  return createHeaderHtml({
     playerOneImage,
     playerOne,
+    playerOneScore,
     playerTwoImage,
     playerTwo,
+    playerTwoScore,
     currentPlayerImage,
-    settings.theme,
-  );
-}
-
-function renderHeaderHTML(
-  playerOneImage: string,
-  playerOne: string,
-  playerTwoImage: string,
-  playerTwo: string,
-  currentPlayerImage: string,
-  theme: ThemeName,
-): string {
-  return `<header class="game__header game__header--${theme}">
-      <div class="game__player-container">
-        <div class="player-one">
-          <img class="player-one__image" src="${playerOneImage}" alt="${playerOne} player">
-          <span class="player-one__name player-one__name--${playerOne}">${playerOne}</span>
-          <span class="player-one__stats player-one__stats--${playerOne}">${playerOneScore}</span>
-        </div>
-        <div class="player-two">
-          <img class="player-two__image" src="${playerTwoImage}" alt="${playerTwo} player">
-          <span class="player-two__name player-two__name--${playerTwo}">${playerTwo}</span>
-          <span class="player-two__stats player-two__stats--${playerTwo}">${playerTwoScore}</span>
-        </div>
-      </div>
-      <div class="game__current-player">
-        <span class="game__current-player-label game__current-player-label--${theme}">Current player:</span>
-        <span class="game__current-player-figure game__current-player-figure--theme-${theme} game__current-player-figure--player-${currentPlayer}">
-          <img class="game__current-player-image game__current-player-image--theme-${theme}" src="${currentPlayerImage}" alt="${currentPlayer} player's turn">
-        </span>
-      </div>
-      <button id="exitButton" class="game__exit-game game__exit-game--${theme}" type="button">
-        <span class="game__exit-icon" aria-hidden="true"></span>
-        <span>Exit game</span>
-      </button>
-    </header>`;
-}
-
-function renderOverlayHTML(theme: ThemeName): string {
-  return `
-  <div id="overlayWrapper" class="overlay__wrapper dNone">
-    <section class="overlay overlay--${theme}" role="dialog" aria-modal="true" aria-labelledby="exit-dialog-title">
-      <h2 id="exit-dialog-title" class="overlay__text overlay__text--${theme}">Do you really want to exit the game?</h2>
-      <div class="overlay__buttons overlay__buttons--${theme}">
-        <button
-        id="backToGame" class="overlay__button-left overlay__button-left--${theme}" type="button">Back to game</button>
-        <button id="exitGame" class="overlay__button-right overlay__button-right--${theme}" type="button">Exit game</button>
-      </div>
-    </section>
-  </div>
-  `;
+    currentPlayer,
+    theme: settings.theme,
+  });
 }
 
 function updateCardVisibility(card: HTMLButtonElement) {
