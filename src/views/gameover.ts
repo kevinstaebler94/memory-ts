@@ -18,6 +18,24 @@ type EndGameData = {
   foods: EndGameImages;
 };
 
+type GameOverScreenData = {
+  playerOne: string;
+  playerOneScore: number;
+  playerTwo: string;
+  playerTwoScore: number;
+  theme: ThemeName;
+  playerOneImage: string;
+  playerTwoImage: string;
+};
+
+type EndScreenData = {
+  player: string;
+  theme: ThemeName;
+  resultType: ResultType;
+  restartButtonLabel: RestartButtonLabel;
+  winningState: string;
+};
+
 const END_GAME_DATA: EndGameData = {
   "code-vibes": {
     draw: {
@@ -97,7 +115,27 @@ function renderGameOverScreen(
 
   if (!app) return;
 
-  app.innerHTML = `
+  app.innerHTML = renderGameOverScreenHtml({
+    playerOne,
+    playerOneScore,
+    playerTwo,
+    playerTwoScore,
+    theme,
+    playerOneImage,
+    playerTwoImage,
+  });
+}
+
+function renderGameOverScreenHtml({
+  playerOne,
+  playerOneScore,
+  playerTwo,
+  playerTwoScore,
+  theme,
+  playerOneImage,
+  playerTwoImage,
+}: GameOverScreenData) {
+  return `
   <section class="game-over game-over--${theme}">
     <div class="game-over__headline-container">
       <h1 class="game-over__headline game-over__headline--${theme}">Game Over</h1>
@@ -130,7 +168,33 @@ export function renderEndScreen(player: string, theme: ThemeName): void {
   const winningState = END_GAME_DATA[theme][player as EndGameState].image;
   if (!app) return;
   if (player === "draw") {
-    app.innerHTML = `
+    app.innerHTML = renderDrawScreenHtml({
+      player,
+      theme,
+      resultType,
+      restartButtonLabel,
+      winningState,
+    });
+  } else {
+    app.innerHTML = renderWinnerScreenHtml({
+      player,
+      theme,
+      resultType,
+      restartButtonLabel,
+      winningState,
+    });
+  }
+  restartGame();
+}
+
+function renderDrawScreenHtml({
+  player,
+  theme,
+  resultType,
+  restartButtonLabel,
+  winningState,
+}: EndScreenData) {
+  return `
     <section class="endscreen endscreen--${theme} endscreen--${resultType}">
       <div class="endscreen__content">
         <p class="endscreen__subheadline endscreen__subheadline--${theme} endscreen__subheadline--${resultType}">It's a</p>
@@ -140,8 +204,16 @@ export function renderEndScreen(player: string, theme: ThemeName): void {
       </div>
     </section>
   `;
-  } else {
-    app.innerHTML = `
+}
+
+function renderWinnerScreenHtml({
+  player,
+  theme,
+  resultType,
+  restartButtonLabel,
+  winningState,
+}: EndScreenData) {
+  return `
     <section class="endscreen endscreen--${theme} endscreen--${resultType}">
       <div class="endscreen__content">
         <p class="endscreen__subheadline endscreen__subheadline--${theme} endscreen__subheadline--${resultType}">The winner is</p>
@@ -151,8 +223,6 @@ export function renderEndScreen(player: string, theme: ThemeName): void {
       </div>
     </section>
   `;
-  }
-  restartGame();
 }
 
 function restartGame(): void {

@@ -180,7 +180,7 @@
   &__board-container {
     position: relative;
     width: fit-content;
-    margin: 3rem auto 0;
+    margin: 12rem auto 0;
   }
 
   &__board {
@@ -231,6 +231,7 @@
     position: absolute;
     inset: 0;
     opacity: 1;
+    border-radius: 15px;
   }
 
   &__card-image {
@@ -241,6 +242,7 @@
     position: absolute;
     inset: 0;
     opacity: 0;
+    border-radius: 15px;
   }
 }
 
@@ -260,14 +262,14 @@
 .player-two__name--orange,
 .player-one__stats--orange,
 .player-two__stats--orange {
-  color: #ea6900;
+  color: #f58e39;
 }
 
 .player-one__name--blue,
 .player-two__name--blue,
 .player-one__stats--blue,
 .player-two__stats--blue {
-  color: #097fc5;
+  color: #2bb1ff;
 }
 
 .overlay__wrapper {

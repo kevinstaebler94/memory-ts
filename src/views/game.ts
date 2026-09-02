@@ -54,6 +54,12 @@ export const THEME_DATA = {
   },
 };
 
+type CardGameState = {
+  firstCard: HTMLButtonElement | null;
+  secondCard: HTMLButtonElement | null;
+  isChecking: boolean;
+};
+
 let playerOne: string = "";
 let playerTwo: string = "";
 let currentPlayer: string = "";
@@ -217,122 +223,170 @@ function updateCardVisibility(card: HTMLButtonElement) {
 }
 
 function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
-  let isChecking = false;
-
   const cards = document.querySelectorAll<HTMLButtonElement>(".game__card");
-
-  let firstCard: HTMLButtonElement | null = null;
-  let secondCard: HTMLButtonElement | null = null;
+  const state: CardGameState = {
+    firstCard: null,
+    secondCard: null,
+    isChecking: false,
+  };
 
   cards.forEach((card) => {
     card.addEventListener("click", () => {
-      if (isChecking) return;
-      if (card.classList.contains("is-matched")) return;
-      if (card === firstCard) return;
-
-      card.classList.add("is-flipped");
-      updateCardVisibility(card);
-
-      if (firstCard === null) {
-        firstCard = card;
-        return;
-      }
-
-      secondCard = card;
-      isChecking = true;
-
-      const firstImage =
-        firstCard.querySelector<HTMLImageElement>(".game__card-image");
-
-      const secondImage =
-        secondCard.querySelector<HTMLImageElement>(".game__card-image");
-
-      if (!firstImage || !secondImage) {
-        isChecking = false;
-        return;
-      }
-
-      if (firstImage.src === secondImage.src) {
-        firstCard.classList.add("is-matched");
-        secondCard.classList.add("is-matched");
-
-        const playerClass =
-          currentPlayer === playerOne ? "player-one" : "player-two";
-
-        const playerStats = document.querySelector<HTMLSpanElement>(
-          `.${playerClass}__stats`,
-        );
-
-        if (currentPlayer === playerOne) {
-          playerOneScore++;
-        } else {
-          playerTwoScore++;
-        }
-
-        if (playerStats) {
-          const score =
-            currentPlayer === playerOne ? playerOneScore : playerTwoScore;
-
-          playerStats.textContent = String(score);
-        }
-        checkGameOver(settings.board, settings.theme);
-        firstCard = null;
-        secondCard = null;
-        isChecking = false;
-        return;
-      }
-
-      setTimeout(() => {
-        if (!firstCard || !secondCard) return;
-
-        firstCard.classList.remove("is-flipped");
-        secondCard.classList.remove("is-flipped");
-
-        updateCardVisibility(firstCard);
-        updateCardVisibility(secondCard);
-
-        if (currentPlayer === playerOne) {
-          currentPlayer = playerTwo;
-        } else {
-          currentPlayer = playerOne;
-        }
-
-        const currentPlayerImage = document.querySelector<HTMLImageElement>(
-          ".game__current-player-image",
-        );
-
-        if (currentPlayerImage) {
-          currentPlayerImage.src =
-            playerData[currentPlayer as keyof PlayerData].images[
-              settings.theme
-            ];
-          currentPlayerImage.alt = `${currentPlayer} player's turn`;
-
-          const currentPlayerFigure = currentPlayerImage.closest(
-            ".game__current-player-figure",
-          );
-
-          currentPlayerFigure?.classList.remove(
-            "game__current-player-figure--player-blue",
-            "game__current-player-figure--player-orange",
-          );
-          currentPlayerFigure?.classList.add(
-            `game__current-player-figure--player-${currentPlayer}`,
-          );
-        }
-
-        firstCard = null;
-        secondCard = null;
-        isChecking = false;
-      }, 1000);
+      handleCardClick(card, state, settings, playerData);
     });
   });
+}
+
+function handleCardClick(
+  card: HTMLButtonElement,
+  state: CardGameState,
+  settings: GameSettings,
+  playerData: PlayerData,
+): void {
+  if (!canFlipCard(card, state)) return;
+
+  flipCard(card);
+
+  if (!state.firstCard) {
+    state.firstCard = card;
+    return;
+  }
+
+  state.secondCard = card;
+  state.isChecking = true;
+
+  compareCards(state, settings, playerData);
+}
+
+function canFlipCard(card: HTMLButtonElement, state: CardGameState): boolean {
+  return (
+    !state.isChecking &&
+    !card.classList.contains("is-matched") &&
+    card !== state.firstCard
+  );
+}
+
+function flipCard(card: HTMLButtonElement): void {
+  card.classList.add("is-flipped");
+  updateCardVisibility(card);
+}
+
+function compareCards(
+  state: CardGameState,
+  settings: GameSettings,
+  playerData: PlayerData,
+): void {
+  const { firstCard, secondCard } = state;
+
+  if (!firstCard || !secondCard) {
+    resetCardSelection(state);
+    return;
+  }
+
+  if (getCardImageSource(firstCard) === getCardImageSource(secondCard)) {
+    handleMatchingCards(firstCard, secondCard, state, settings);
+    return;
+  }
+
+  handleDifferentCards(firstCard, secondCard, state, settings, playerData);
+}
+
+function getCardImageSource(card: HTMLButtonElement): string {
+  return card.querySelector<HTMLImageElement>(".game__card-image")?.src ?? "";
+}
+
+function handleMatchingCards(
+  firstCard: HTMLButtonElement,
+  secondCard: HTMLButtonElement,
+  state: CardGameState,
+  settings: GameSettings,
+): void {
+  firstCard.classList.add("is-matched");
+  secondCard.classList.add("is-matched");
+  increaseCurrentPlayerScore();
+  updateCurrentPlayerScore();
+  checkGameOver(settings.board, settings.theme);
+  resetCardSelection(state);
+}
+
+function increaseCurrentPlayerScore(): void {
+  if (currentPlayer === playerOne) {
+    playerOneScore++;
+    return;
+  }
+
+  playerTwoScore++;
+}
+
+function updateCurrentPlayerScore(): void {
+  const playerClass = currentPlayer === playerOne ? "player-one" : "player-two";
+  const playerStats = document.querySelector<HTMLSpanElement>(
+    `.${playerClass}__stats`,
+  );
+
+  if (!playerStats) return;
+
+  const score = currentPlayer === playerOne ? playerOneScore : playerTwoScore;
+  playerStats.textContent = String(score);
+}
+
+function handleDifferentCards(
+  firstCard: HTMLButtonElement,
+  secondCard: HTMLButtonElement,
+  state: CardGameState,
+  settings: GameSettings,
+  playerData: PlayerData,
+): void {
+  setTimeout(() => {
+    hideCard(firstCard);
+    hideCard(secondCard);
+    switchCurrentPlayer();
+    updateCurrentPlayerDisplay(settings, playerData);
+    resetCardSelection(state);
+  }, 1000);
+}
+
+function hideCard(card: HTMLButtonElement): void {
+  card.classList.remove("is-flipped");
+  updateCardVisibility(card);
+}
+
+function switchCurrentPlayer(): void {
+  currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
+}
+
+function updateCurrentPlayerDisplay(
+  settings: GameSettings,
+  playerData: PlayerData,
+): void {
+  const image = document.querySelector<HTMLImageElement>(
+    ".game__current-player-image",
+  );
+
+  if (!image) return;
+
+  image.src =
+    playerData[currentPlayer as keyof PlayerData].images[settings.theme];
+  image.alt = `${currentPlayer} player's turn`;
+
+  const figure = image.closest(".game__current-player-figure");
+  figure?.classList.remove(
+    "game__current-player-figure--player-blue",
+    "game__current-player-figure--player-orange",
+  );
+  figure?.classList.add(`game__current-player-figure--player-${currentPlayer}`);
+}
+
+function resetCardSelection(state: CardGameState): void {
+  state.firstCard = null;
+  state.secondCard = null;
+  state.isChecking = false;
 }
 
 function checkGameOver(boardSize: number, theme: ThemeName): void {
   const matchedCards = document.querySelectorAll(".game__card.is-matched");
 
-  if (matchedCards.length === 4) {
+  if (matchedCards.length === boardSize) {
     initGameOverScreen(
       playerOne,
       playerOneScore,
