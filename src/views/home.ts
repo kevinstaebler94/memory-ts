@@ -1,9 +1,12 @@
 import { initSettings } from "./settings";
+
+/** Initializes and displays the home screen. */
 export function initHome(): void {
   renderHome();
   addEvents();
 }
 
+/** Renders the home screen in the application container. */
 function renderHome(): void {
   const app = document.querySelector("#app");
 
@@ -12,7 +15,12 @@ function renderHome(): void {
   app.innerHTML = renderHomeHtml();
 }
 
-function renderHomeHtml() {
+/**
+ * Creates the markup for the home screen.
+ *
+ * @returns The home screen HTML.
+ */
+function renderHomeHtml(): string {
   return `
     <section class="home">
       <div class="home__container">
@@ -41,7 +49,8 @@ function renderHomeHtml() {
   `;
 }
 
-function addEvents() {
+/** Registers the home screen event listeners. */
+function addEvents(): void {
   const playButton = document.querySelector(".home__play-button");
 
   if (!playButton) return;

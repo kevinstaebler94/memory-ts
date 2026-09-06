@@ -1,4 +1,8 @@
 import { initGame } from "./game";
+import {
+  createSettingsOptionHtml,
+  createGamePreviewHtml,
+} from "./settings-html";
 
 type Theme = {
   name: string;
@@ -52,6 +56,7 @@ export const PLAYER_DATA: PlayerData = {
   },
 };
 
+/** Initializes the settings screen and its interactions. */
 export function initSettings(): void {
   renderSettings();
   initThemeEvents();
@@ -60,6 +65,7 @@ export function initSettings(): void {
   initPlayButton();
 }
 
+/** Renders the settings screen in the application container. */
 export function renderSettings(): void {
   const app = document.querySelector("#app");
   const leftHtml = createSettingsOptionHtml();
@@ -75,117 +81,7 @@ export function renderSettings(): void {
   `;
 }
 
-function createSettingsOptionHtml(): string {
-  return `
-    <div class="settings__left">
-      <h1 id="settings-title" class="settings__headline">Settings</h1>
-      <section class="settings__section settings__themes">
-        <div class="settings__section-container">
-          <img src="src/assets/icons/theme.svg" alt="" />
-          <h2 class="settings__section-title">Game themes</h2>
-        </div>
-        <ul class="settings__list">
-          <li>
-            <label class="settings__label">
-              <input class="settings__input" type="radio" name="theme" value="code-vibes" />
-              <span class="settings__radio"></span>
-              <span class="settings__text">Code vibes theme</span>
-            </label>
-          </li>
-          <li>
-            <label class="settings__label">
-              <input class="settings__input" type="radio" name="theme" value="gaming"/>
-              <span class="settings__radio"></span>
-              <span class="settings__text">Gaming theme</span>
-            </label>
-          </li>
-        </ul>
-      </section>
-      <section class="settings__section settings__player">
-        <div class="settings__section-container">
-          <img src="src/assets/icons/player.svg" alt="" />
-          <h2 class="settings__section-title">Choose player</h2>
-        </div>
-        <ul class="settings__list">
-          <li>
-            <label class="settings__label">
-              <input class="settings__input" type="radio" name="player" value="blue" />
-              <span class="settings__radio"></span>
-              <span class="settings__text">Blue</span>
-            </label>
-          </li>
-          <li>
-            <label class="settings__label">
-              <input class="settings__input" type="radio" name="player" value="orange"/>
-              <span class="settings__radio"></span>
-              <span class="settings__text">Orange</span>
-            </label>
-          </li>
-        </ul>
-      </section>
-      <section class="settings__section settings__board">
-        <div class="settings__section-container">
-          <img src="src/assets/icons/board.svg" alt="" />
-          <h2 class="settings__section-title">Board size</h2>
-        </div>
-        <ul class="settings__list">
-          <li>
-            <label class="settings__label">
-              <input class="settings__input" type="radio" name="board" value="16"/>
-              <span class="settings__radio"></span>
-              <span class="settings__text">16 cards</span>
-            </label>
-          </li>
-          <li>
-            <label class="settings__label">
-              <input class="settings__input" type="radio" name="board" value="24"/>
-              <span class="settings__radio"></span>
-              <span class="settings__text">24 cards</span>
-            </label>
-          </li>
-          <li>
-            <label class="settings__label">
-              <input class="settings__input" type="radio" name="board" value="36"/>
-              <span class="settings__radio"></span>
-              <span class="settings__text">36 cards</span>
-            </label>
-          </li>
-        </ul>
-      </section>
-    </div>
-  `;
-}
-
-function createGamePreviewHtml(): string {
-  return `
-    <div class="settings__right">
-      <figure class="settings__game-preview">
-        <div class="settings__preview-container">
-          <img class="settings__preview-image" src="src/assets/images/preview/theme-one.svg" alt="Preview of the selected game theme" />
-        </div>
-        <figcaption class="settings__preview-bar">
-          <div class="settings__preview-item">
-            <span class="settings__preview-theme">Game theme</span>
-          </div>
-
-          <div class="settings__preview-item">
-            <span class="settings__preview-player">Player</span>
-          </div>
-
-          <div class="settings__preview-item">
-            <span class="settings__preview-board">Board size</span>
-          </div>
-
-          <button class="settings__play-button" type="button" disabled>
-            <img class="settings__play-icon" src="src/assets/icons/play-icon.svg" alt="" />
-            <span>Start</span>
-          </button>
-        </figcaption>
-      </figure>
-    </div>
-  `;
-}
-
+/** Registers theme selection and preview event listeners. */
 function initThemeEvents(): void {
   const themeInputs = document.querySelectorAll<HTMLInputElement>(
     ".settings__input[name='theme']",
@@ -205,6 +101,11 @@ function initThemeEvents(): void {
   });
 }
 
+/**
+ * Updates the theme preview after a theme selection.
+ *
+ * @param event - The change event from a theme input.
+ */
 function handleThemeChange(event: Event): void {
   const input = event.currentTarget as HTMLInputElement;
   const value = input.value;
@@ -214,6 +115,11 @@ function handleThemeChange(event: Event): void {
   updateThemePreviewName(theme);
 }
 
+/**
+ * Updates the preview image for a theme.
+ *
+ * @param theme - The theme to preview.
+ */
 function updateThemePreview(theme: Theme): void {
   const image = document.querySelector(
     ".settings__preview-image",
@@ -223,6 +129,11 @@ function updateThemePreview(theme: Theme): void {
   image.src = theme.image;
 }
 
+/**
+ * Temporarily previews the theme belonging to a hovered option.
+ *
+ * @param event - The mouse event from a theme label.
+ */
 function handleThemeHover(event: Event): void {
   const label = event.currentTarget as HTMLLabelElement;
 
@@ -237,6 +148,7 @@ function handleThemeHover(event: Event): void {
   updateThemePreview(theme);
 }
 
+/** Restores the preview of the currently selected theme. */
 function handleThemeDefault(): void {
   const input = document.querySelector<HTMLInputElement>(
     ".settings__input[name='theme']:checked",
@@ -250,6 +162,7 @@ function handleThemeDefault(): void {
   updateThemePreview(theme);
 }
 
+/** Registers player selection event listeners. */
 function initPlayerEvents(): void {
   const playerInputs = document.querySelectorAll<HTMLInputElement>(
     ".settings__input[name='player']",
@@ -261,6 +174,11 @@ function initPlayerEvents(): void {
   });
 }
 
+/**
+ * Updates the player preview after a player selection.
+ *
+ * @param event - The change event from a player input.
+ */
 function handlePlayerChange(event: Event): void {
   const input = event.currentTarget as HTMLInputElement;
   const value = input.value;
@@ -268,6 +186,11 @@ function handlePlayerChange(event: Event): void {
   updatePlayerPreview(value);
 }
 
+/**
+ * Displays the selected player's name in the preview.
+ *
+ * @param value - The selected player identifier.
+ */
 function updatePlayerPreview(value: string): void {
   const playerName = PLAYER_DATA[value as keyof typeof PLAYER_DATA].name;
   const playerPreview = document.querySelector<HTMLSpanElement>(
@@ -279,6 +202,11 @@ function updatePlayerPreview(value: string): void {
   playerPreview.textContent = playerName;
 }
 
+/**
+ * Displays the selected theme's name in the preview.
+ *
+ * @param theme - The selected theme.
+ */
 function updateThemePreviewName(theme: Theme): void {
   const imageName = document.querySelector<HTMLSpanElement>(
     ".settings__preview-theme",
@@ -288,6 +216,7 @@ function updateThemePreviewName(theme: Theme): void {
   imageName.textContent = theme.name;
 }
 
+/** Registers board size selection event listeners. */
 function initBoardEvents(): void {
   const boardInputs = document.querySelectorAll<HTMLInputElement>(
     ".settings__input[name='board']",
@@ -299,6 +228,11 @@ function initBoardEvents(): void {
   });
 }
 
+/**
+ * Updates the board preview after a size selection.
+ *
+ * @param event - The change event from a board input.
+ */
 function handleBoardChange(event: Event): void {
   const input = event.currentTarget as HTMLInputElement;
   const value = input.value;
@@ -306,7 +240,12 @@ function handleBoardChange(event: Event): void {
   updateBoardPreview(value);
 }
 
-function updateBoardPreview(value: string) {
+/**
+ * Displays the selected board size in the preview.
+ *
+ * @param value - The selected number of cards.
+ */
+function updateBoardPreview(value: string): void {
   const board = document.querySelector<HTMLSpanElement>(
     ".settings__preview-board",
   );
@@ -315,6 +254,7 @@ function updateBoardPreview(value: string) {
   board.textContent = value;
 }
 
+/** Enables the play button when every required setting is selected. */
 function checkSettings(): void {
   const theme = document.querySelector(
     ".settings__input[name='theme']:checked",
@@ -336,6 +276,7 @@ function checkSettings(): void {
   playBtn.disabled = !(theme && player && board);
 }
 
+/** Registers the event listener that starts a game. */
 function initPlayButton(): void {
   const playBtn = document.querySelector<HTMLButtonElement>(
     ".settings__play-button",
@@ -345,10 +286,12 @@ function initPlayButton(): void {
   playBtn.addEventListener("click", startNewGame);
 }
 
-function startNewGame() {
+/** Starts a game with the currently selected settings. */
+function startNewGame(): void {
   getSelectedSettings();
 }
 
+/** Reads, validates, and applies the selected game settings. */
 function getSelectedSettings(): void {
   const theme = document.querySelector<HTMLInputElement>(
     ".settings__input[name='theme']:checked",

@@ -12,6 +12,13 @@ type GameHeaderData = {
   theme: ThemeName;
 };
 
+/**
+ * Creates the main game layout.
+ *
+ * @param settings - The selected game configuration.
+ * @param headerHtml - The rendered game header.
+ * @returns The game layout HTML.
+ */
 export function createGameHtml(
   settings: GameSettings,
   headerHtml: string,
@@ -28,6 +35,13 @@ export function createGameHtml(
   `;
 }
 
+/**
+ * Creates the cards for the memory board.
+ *
+ * @param cardsCover - The image shown on face-down cards.
+ * @param gameCards - The shuffled card image paths.
+ * @returns The board cards HTML.
+ */
 export function createBoardHtml(
   cardsCover: string,
   gameCards: string[],
@@ -46,6 +60,12 @@ export function createBoardHtml(
   return boardHtml;
 }
 
+/**
+ * Creates the game header with player and turn information.
+ *
+ * @param data - The data displayed in the game header.
+ * @returns The game header HTML.
+ */
 export function createHeaderHtml({
   playerOneImage,
   playerOne,
@@ -83,6 +103,12 @@ export function createHeaderHtml({
     </header>`;
 }
 
+/**
+ * Creates the exit confirmation dialog.
+ *
+ * @param theme - The active game theme.
+ * @returns The exit overlay HTML.
+ */
 function createOverlayHtml(theme: ThemeName): string {
   return `
   <div id="overlayWrapper" class="overlay__wrapper dNone">

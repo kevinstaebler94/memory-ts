@@ -1,13 +1,9 @@
 import type { GameSettings, PlayerData, ThemeName } from "./settings";
-import { initSettings } from "./settings";
 import { initGameOverScreen } from "./gameover";
 import { renderEndScreen } from "./gameover";
 import { THEME_DATA } from "./game-data";
-import {
-  createBoardHtml,
-  createGameHtml,
-  createHeaderHtml,
-} from "./game-html";
+import { createBoardHtml, createGameHtml, createHeaderHtml } from "./game-html";
+import { handleExitGame, handleOverlayButtons } from "./game-overlay";
 
 type CardGameState = {
   firstCard: HTMLButtonElement | null;
@@ -21,6 +17,12 @@ let currentPlayer: string = "";
 let playerOneScore = 0;
 let playerTwoScore = 0;
 
+/**
+ * Initializes a new game with the selected configuration.
+ *
+ * @param settings - The selected theme, player, and board size.
+ * @param playerData - The available player metadata.
+ */
 export function initGame(settings: GameSettings, playerData: PlayerData): void {
   resetGameState();
   renderGame(settings, playerData);
@@ -28,6 +30,12 @@ export function initGame(settings: GameSettings, playerData: PlayerData): void {
   handleOverlayButtons();
 }
 
+/**
+ * Prepares, shuffles, and renders the cards for a game.
+ *
+ * @param settings - The selected game configuration.
+ * @param playerData - The available player metadata.
+ */
 function renderGame(settings: GameSettings, playerData: PlayerData): void {
   if (!settings || !playerData) return;
 
@@ -50,6 +58,12 @@ function renderGame(settings: GameSettings, playerData: PlayerData): void {
   handleCardGame(settings, playerData);
 }
 
+/**
+ * Renders the game layout in the application container.
+ *
+ * @param settings - The selected game configuration.
+ * @param playerData - The available player metadata.
+ */
 function renderGameHTML(settings: GameSettings, playerData: PlayerData): void {
   const app = document.querySelector("#app");
 
@@ -58,6 +72,12 @@ function renderGameHTML(settings: GameSettings, playerData: PlayerData): void {
   app.innerHTML = createGameHtml(settings, createHeader(settings, playerData));
 }
 
+/**
+ * Renders the prepared cards on the game board.
+ *
+ * @param cardsCover - The image shown on face-down cards.
+ * @param gameCards - The shuffled card image paths.
+ */
 function renderBoardHTML(cardsCover: string, gameCards: string[]): void {
   const board = document.querySelector("#board");
   if (!board) return;
@@ -65,6 +85,13 @@ function renderBoardHTML(cardsCover: string, gameCards: string[]): void {
   board.innerHTML = createBoardHtml(cardsCover, gameCards);
 }
 
+/**
+ * Assigns the players and creates the initial game header.
+ *
+ * @param settings - The selected game configuration.
+ * @param playerData - The available player metadata.
+ * @returns The game header HTML.
+ */
 function createHeader(settings: GameSettings, playerData: PlayerData): string {
   playerOne = settings.player;
 
@@ -97,7 +124,12 @@ function createHeader(settings: GameSettings, playerData: PlayerData): string {
   });
 }
 
-function updateCardVisibility(card: HTMLButtonElement) {
+/**
+ * Synchronizes a card's images with its flipped state.
+ *
+ * @param card - The card whose images should be updated.
+ */
+function updateCardVisibility(card: HTMLButtonElement): void {
   const cover = card.querySelector<HTMLImageElement>(".game__card-cover");
   const image = card.querySelector<HTMLImageElement>(".game__card-image");
 
@@ -112,6 +144,12 @@ function updateCardVisibility(card: HTMLButtonElement) {
   }
 }
 
+/**
+ * Creates the selection state and registers card click listeners.
+ *
+ * @param settings - The active game configuration.
+ * @param playerData - The available player metadata.
+ */
 function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
   const cards = document.querySelectorAll<HTMLButtonElement>(".game__card");
   const state: CardGameState = {
@@ -127,6 +165,14 @@ function handleCardGame(settings: GameSettings, playerData: PlayerData): void {
   });
 }
 
+/**
+ * Processes the selection of a memory card.
+ *
+ * @param card - The selected card.
+ * @param state - The current card selection state.
+ * @param settings - The active game configuration.
+ * @param playerData - The available player metadata.
+ */
 function handleCardClick(
   card: HTMLButtonElement,
   state: CardGameState,
@@ -148,6 +194,13 @@ function handleCardClick(
   compareCards(state, settings, playerData);
 }
 
+/**
+ * Determines whether a card can be selected in the current state.
+ *
+ * @param card - The card to validate.
+ * @param state - The current card selection state.
+ * @returns Whether the card can be flipped.
+ */
 function canFlipCard(card: HTMLButtonElement, state: CardGameState): boolean {
   return (
     !state.isChecking &&
@@ -156,11 +209,23 @@ function canFlipCard(card: HTMLButtonElement, state: CardGameState): boolean {
   );
 }
 
+/**
+ * Turns a card face up.
+ *
+ * @param card - The card to reveal.
+ */
 function flipCard(card: HTMLButtonElement): void {
   card.classList.add("is-flipped");
   updateCardVisibility(card);
 }
 
+/**
+ * Compares the two selected cards and handles the result.
+ *
+ * @param state - The current card selection state.
+ * @param settings - The active game configuration.
+ * @param playerData - The available player metadata.
+ */
 function compareCards(
   state: CardGameState,
   settings: GameSettings,
@@ -181,10 +246,24 @@ function compareCards(
   handleDifferentCards(firstCard, secondCard, state, settings, playerData);
 }
 
+/**
+ * Gets the image URL that identifies a card.
+ *
+ * @param card - The card to inspect.
+ * @returns The card image URL, or an empty string when absent.
+ */
 function getCardImageSource(card: HTMLButtonElement): string {
   return card.querySelector<HTMLImageElement>(".game__card-image")?.src ?? "";
 }
 
+/**
+ * Marks a pair as matched, updates the score, and checks for game over.
+ *
+ * @param firstCard - The first matching card.
+ * @param secondCard - The second matching card.
+ * @param state - The current card selection state.
+ * @param settings - The active game configuration.
+ */
 function handleMatchingCards(
   firstCard: HTMLButtonElement,
   secondCard: HTMLButtonElement,
@@ -199,6 +278,7 @@ function handleMatchingCards(
   resetCardSelection(state);
 }
 
+/** Increments the active player's score. */
 function increaseCurrentPlayerScore(): void {
   if (currentPlayer === playerOne) {
     playerOneScore++;
@@ -208,6 +288,7 @@ function increaseCurrentPlayerScore(): void {
   playerTwoScore++;
 }
 
+/** Updates the active player's score in the game header. */
 function updateCurrentPlayerScore(): void {
   const playerClass = currentPlayer === playerOne ? "player-one" : "player-two";
   const playerStats = document.querySelector<HTMLSpanElement>(
@@ -220,6 +301,15 @@ function updateCurrentPlayerScore(): void {
   playerStats.textContent = String(score);
 }
 
+/**
+ * Hides a mismatched pair and passes the turn to the other player.
+ *
+ * @param firstCard - The first mismatched card.
+ * @param secondCard - The second mismatched card.
+ * @param state - The current card selection state.
+ * @param settings - The active game configuration.
+ * @param playerData - The available player metadata.
+ */
 function handleDifferentCards(
   firstCard: HTMLButtonElement,
   secondCard: HTMLButtonElement,
@@ -236,15 +326,27 @@ function handleDifferentCards(
   }, 1000);
 }
 
+/**
+ * Turns a card face down.
+ *
+ * @param card - The card to hide.
+ */
 function hideCard(card: HTMLButtonElement): void {
   card.classList.remove("is-flipped");
   updateCardVisibility(card);
 }
 
+/** Passes the turn to the other player. */
 function switchCurrentPlayer(): void {
   currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
 }
 
+/**
+ * Updates the header to identify the active player.
+ *
+ * @param settings - The active game configuration.
+ * @param playerData - The available player metadata.
+ */
 function updateCurrentPlayerDisplay(
   settings: GameSettings,
   playerData: PlayerData,
@@ -267,12 +369,23 @@ function updateCurrentPlayerDisplay(
   figure?.classList.add(`game__current-player-figure--player-${currentPlayer}`);
 }
 
+/**
+ * Clears the selected cards and unlocks card input.
+ *
+ * @param state - The card selection state to reset.
+ */
 function resetCardSelection(state: CardGameState): void {
   state.firstCard = null;
   state.secondCard = null;
   state.isChecking = false;
 }
 
+/**
+ * Shows the final score and result when all pairs are matched.
+ *
+ * @param boardSize - The total number of cards on the board.
+ * @param theme - The active game theme.
+ */
 function checkGameOver(boardSize: number, theme: ThemeName): void {
   const matchedCards = document.querySelectorAll(".game__card.is-matched");
 
@@ -298,66 +411,11 @@ function checkGameOver(boardSize: number, theme: ThemeName): void {
   }
 }
 
-function resetGameState(): void {
+/** Resets all player and score state for a fresh game. */
+export function resetGameState(): void {
   playerOne = "";
   playerTwo = "";
   currentPlayer = "";
   playerOneScore = 0;
   playerTwoScore = 0;
-}
-
-function handleExitGame(): void {
-  const exitButton = document.querySelector<HTMLButtonElement>("#exitButton");
-
-  if (!exitButton) return;
-
-  exitButton.addEventListener("click", toggleOverlay);
-}
-
-function toggleOverlay(): void {
-  const overlayWrapper = document.querySelector<HTMLElement>("#overlayWrapper");
-  const overlay = overlayWrapper?.querySelector<HTMLElement>(".overlay");
-
-  if (!overlayWrapper || !overlay) return;
-
-  const isHidden = overlayWrapper.classList.contains("dNone");
-
-  if (isHidden) {
-    overlay.classList.remove("is-closing");
-    overlayWrapper.classList.remove("dNone");
-    return;
-  }
-
-  overlay.classList.add("is-closing");
-
-  overlay.addEventListener(
-    "animationend",
-    () => {
-      overlayWrapper.classList.add("dNone");
-      overlay.classList.remove("is-closing");
-    },
-    { once: true },
-  );
-}
-
-function handleOverlayButtons(): void {
-  const overlayWrapper = document.querySelector<HTMLElement>("#overlayWrapper");
-  const overlay = overlayWrapper?.querySelector<HTMLElement>(".overlay");
-  const backToGame = document.querySelector<HTMLButtonElement>("#backToGame");
-  const exitGame = document.querySelector<HTMLButtonElement>("#exitGame");
-
-  if (!overlayWrapper || !overlay || !backToGame || !exitGame) return;
-
-  overlayWrapper.addEventListener("click", toggleOverlay);
-
-  overlay.addEventListener("click", (event) => {
-    event.stopPropagation();
-  });
-
-  backToGame.addEventListener("click", toggleOverlay);
-
-  exitGame.addEventListener("click", () => {
-    resetGameState();
-    initSettings();
-  });
 }

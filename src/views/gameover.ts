@@ -83,6 +83,15 @@ const END_GAME_DATA: EndGameData = {
   },
 };
 
+/**
+ * Initializes the final score screen.
+ *
+ * @param playerOne - The first player's identifier.
+ * @param playerOneScore - The first player's score.
+ * @param playerTwo - The second player's identifier.
+ * @param playerTwoScore - The second player's score.
+ * @param theme - The active game theme.
+ */
 export function initGameOverScreen(
   playerOne: string,
   playerOneScore: number,
@@ -99,6 +108,15 @@ export function initGameOverScreen(
   );
 }
 
+/**
+ * Resolves player assets and renders the final score screen.
+ *
+ * @param playerOne - The first player's identifier.
+ * @param playerOneScore - The first player's score.
+ * @param playerTwo - The second player's identifier.
+ * @param playerTwoScore - The second player's score.
+ * @param theme - The active game theme.
+ */
 function renderGameOverScreen(
   playerOne: string,
   playerOneScore: number,
@@ -126,6 +144,12 @@ function renderGameOverScreen(
   });
 }
 
+/**
+ * Creates the final score screen markup.
+ *
+ * @param data - The players, scores, images, and active theme.
+ * @returns The final score screen HTML.
+ */
 function renderGameOverScreenHtml({
   playerOne,
   playerOneScore,
@@ -134,7 +158,7 @@ function renderGameOverScreenHtml({
   theme,
   playerOneImage,
   playerTwoImage,
-}: GameOverScreenData) {
+}: GameOverScreenData): string {
   return `
   <section class="game-over game-over--${theme}">
     <div class="game-over__headline-container">
@@ -159,6 +183,12 @@ function renderGameOverScreenHtml({
         `;
 }
 
+/**
+ * Renders the winner or draw result screen.
+ *
+ * @param player - The winning player identifier, or `draw`.
+ * @param theme - The active game theme.
+ */
 export function renderEndScreen(player: string, theme: ThemeName): void {
   const app = document.querySelector("#app");
   const resultType: ResultType = player === "draw" ? "draw" : "winner";
@@ -187,13 +217,19 @@ export function renderEndScreen(player: string, theme: ThemeName): void {
   restartGame();
 }
 
+/**
+ * Creates the draw result markup.
+ *
+ * @param data - The result screen presentation data.
+ * @returns The draw result HTML.
+ */
 function renderDrawScreenHtml({
   player,
   theme,
   resultType,
   restartButtonLabel,
   winningState,
-}: EndScreenData) {
+}: EndScreenData): string {
   return `
     <section class="endscreen endscreen--${theme} endscreen--${resultType}">
       <div class="endscreen__content">
@@ -206,13 +242,19 @@ function renderDrawScreenHtml({
   `;
 }
 
+/**
+ * Creates the winner result markup.
+ *
+ * @param data - The result screen presentation data.
+ * @returns The winner result HTML.
+ */
 function renderWinnerScreenHtml({
   player,
   theme,
   resultType,
   restartButtonLabel,
   winningState,
-}: EndScreenData) {
+}: EndScreenData): string {
   return `
     <section class="endscreen endscreen--${theme} endscreen--${resultType}">
       <div class="endscreen__content">
@@ -225,6 +267,7 @@ function renderWinnerScreenHtml({
   `;
 }
 
+/** Registers the action that returns from the result screen to settings. */
 function restartGame(): void {
   const restartButton = document.querySelector<HTMLButtonElement>(
     ".endscreen__restart-button",
