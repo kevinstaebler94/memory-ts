@@ -39,46 +39,46 @@ type EndScreenData = {
 const END_GAME_DATA: EndGameData = {
   "code-vibes": {
     draw: {
-      image: "src/assets/images/gameover/draw.svg",
+      image: "./assets/images/gameover/draw.svg",
     },
     orange: {
-      image: "src/assets/images/gameover/player-orange.svg",
+      image: "./assets/images/gameover/player-orange.svg",
     },
     blue: {
-      image: "src/assets/images/gameover/player-blue.svg",
+      image: "./assets/images/gameover/player-blue.svg",
     },
   },
   gaming: {
     draw: {
-      image: "src/assets/images/gameover/draw.svg",
+      image: "./assets/images/gameover/draw.svg",
     },
     orange: {
-      image: "src/assets/images/gameover/pockal.svg",
+      image: "./assets/images/gameover/pockal.svg",
     },
     blue: {
-      image: "src/assets/images/gameover/pockal.svg",
+      image: "./assets/images/gameover/pockal.svg",
     },
   },
   "da-projects": {
     draw: {
-      image: "src/assets/images/gameover/draw.svg",
+      image: "./assets/images/gameover/draw.svg",
     },
     orange: {
-      image: "src/assets/images/gameover/player-orange.svg",
+      image: "./assets/images/gameover/player-orange.svg",
     },
     blue: {
-      image: "src/assets/images/gameover/player-blue.svg",
+      image: "./assets/images/gameover/player-blue.svg",
     },
   },
   foods: {
     draw: {
-      image: "src/assets/images/gameover/draw.svg",
+      image: "./assets/images/gameover/draw.svg",
     },
     orange: {
-      image: "src/assets/images/gameover/player-orange.svg",
+      image: "./assets/images/gameover/player-orange.svg",
     },
     blue: {
-      image: "src/assets/images/gameover/player-blue.svg",
+      image: "./assets/images/gameover/player-blue.svg",
     },
   },
 };

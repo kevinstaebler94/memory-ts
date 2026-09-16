@@ -18,7 +18,7 @@
   }
 
   &__subtitle {
-    font-family: "Almarai";
+    font-family: "Almarai-Regular";
     font-size: clamp(2.25rem, 5vw, 3rem);
     font-weight: 400;
     align-self: flex-start;
@@ -40,6 +40,7 @@
     padding: clamp(0.5rem, 2vw, 1rem);
     cursor: pointer;
     transition: transform 250ms ease-in-out;
+    border: none;
 
     &:hover {
       transform: scale(1.08);

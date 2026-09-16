@@ -9,7 +9,7 @@ export function createSettingsOptionHtml(): string {
       <h1 id="settings-title" class="settings__headline">Settings</h1>
       <section class="settings__section settings__themes">
         <div class="settings__section-container">
-          <img src="src/assets/icons/theme.svg" alt="" />
+          <img src="./assets/icons/theme.svg" alt="" />
           <h2 class="settings__section-title">Game themes</h2>
         </div>
         <ul class="settings__list">
@@ -31,7 +31,7 @@ export function createSettingsOptionHtml(): string {
       </section>
       <section class="settings__section settings__player">
         <div class="settings__section-container">
-          <img src="src/assets/icons/player.svg" alt="" />
+          <img src="./assets/icons/player.svg" alt="" />
           <h2 class="settings__section-title">Choose player</h2>
         </div>
         <ul class="settings__list">
@@ -53,7 +53,7 @@ export function createSettingsOptionHtml(): string {
       </section>
       <section class="settings__section settings__board">
         <div class="settings__section-container">
-          <img src="src/assets/icons/board.svg" alt="" />
+          <img src="./assets/icons/board.svg" alt="" />
           <h2 class="settings__section-title">Board size</h2>
         </div>
         <ul class="settings__list">
@@ -94,7 +94,7 @@ export function createGamePreviewHtml(): string {
     <div class="settings__right">
       <figure class="settings__game-preview">
         <div class="settings__preview-container">
-          <img class="settings__preview-image" src="src/assets/images/preview/theme-one.svg" alt="Preview of the selected game theme" />
+          <img class="settings__preview-image" src="./assets/images/preview/theme-one.svg" alt="Preview of the selected game theme" />
         </div>
         <figcaption class="settings__preview-bar">
           <div class="settings__preview-item">
@@ -110,7 +110,7 @@ export function createGamePreviewHtml(): string {
           </div>
 
           <button class="settings__play-button" type="button" disabled>
-            <img class="settings__play-icon" src="src/assets/icons/play-icon.svg" alt="" />
+            <span class="settings__play-icon" aria-hidden="true"></span>
             <span>Start</span>
           </button>
         </figcaption>

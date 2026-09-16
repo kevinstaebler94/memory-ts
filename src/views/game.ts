@@ -23,9 +23,15 @@ let playerTwoScore = 0;
  * @param settings - The selected theme, player, and board size.
  * @param playerData - The available player metadata.
  */
-export function initGame(settings: GameSettings, playerData: PlayerData): void {
+export function initGame(playerData: PlayerData): void {
+  const storedSettings = localStorage.getItem("settings");
+
+  if (!storedSettings) return;
+
+  const parsedSettings: GameSettings = JSON.parse(storedSettings);
+
   resetGameState();
-  renderGame(settings, playerData);
+  renderGame(parsedSettings, playerData);
   handleExitGame();
   handleOverlayButtons();
 }
@@ -177,7 +183,7 @@ function handleCardClick(
   card: HTMLButtonElement,
   state: CardGameState,
   settings: GameSettings,
-  playerData: PlayerData,
+  playerData: PlayerData
 ): void {
   if (!canFlipCard(card, state)) return;
 
@@ -229,7 +235,7 @@ function flipCard(card: HTMLButtonElement): void {
 function compareCards(
   state: CardGameState,
   settings: GameSettings,
-  playerData: PlayerData,
+  playerData: PlayerData
 ): void {
   const { firstCard, secondCard } = state;
 
@@ -268,7 +274,7 @@ function handleMatchingCards(
   firstCard: HTMLButtonElement,
   secondCard: HTMLButtonElement,
   state: CardGameState,
-  settings: GameSettings,
+  settings: GameSettings
 ): void {
   firstCard.classList.add("is-matched");
   secondCard.classList.add("is-matched");
@@ -292,7 +298,7 @@ function increaseCurrentPlayerScore(): void {
 function updateCurrentPlayerScore(): void {
   const playerClass = currentPlayer === playerOne ? "player-one" : "player-two";
   const playerStats = document.querySelector<HTMLSpanElement>(
-    `.${playerClass}__stats`,
+    `.${playerClass}__stats`
   );
 
   if (!playerStats) return;
@@ -315,7 +321,7 @@ function handleDifferentCards(
   secondCard: HTMLButtonElement,
   state: CardGameState,
   settings: GameSettings,
-  playerData: PlayerData,
+  playerData: PlayerData
 ): void {
   setTimeout(() => {
     hideCard(firstCard);
@@ -349,10 +355,10 @@ function switchCurrentPlayer(): void {
  */
 function updateCurrentPlayerDisplay(
   settings: GameSettings,
-  playerData: PlayerData,
+  playerData: PlayerData
 ): void {
   const image = document.querySelector<HTMLImageElement>(
-    ".game__current-player-image",
+    ".game__current-player-image"
   );
 
   if (!image) return;
@@ -364,7 +370,7 @@ function updateCurrentPlayerDisplay(
   const figure = image.closest(".game__current-player-figure");
   figure?.classList.remove(
     "game__current-player-figure--player-blue",
-    "game__current-player-figure--player-orange",
+    "game__current-player-figure--player-orange"
   );
   figure?.classList.add(`game__current-player-figure--player-${currentPlayer}`);
 }
@@ -395,7 +401,7 @@ function checkGameOver(boardSize: number, theme: ThemeName): void {
       playerOneScore,
       playerTwo,
       playerTwoScore,
-      theme,
+      theme
     );
     setTimeout(() => {
       if (playerOneScore > playerTwoScore) {

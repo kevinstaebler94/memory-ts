@@ -30,12 +30,12 @@ export type Player = {
 const THEME_DATA = {
   "code-vibes": {
     name: "Code vibes",
-    image: "/src/assets/images/preview/theme-one.svg",
+    image: "./assets/images/preview/theme-one.svg",
   },
 
   gaming: {
     name: "Gaming",
-    image: "/src/assets/images/preview/theme-two.svg",
+    image: "./assets/images/preview/theme-two.svg",
   },
 };
 
@@ -43,15 +43,15 @@ export const PLAYER_DATA: PlayerData = {
   blue: {
     name: "Blue",
     images: {
-      "code-vibes": "src/assets/icons/label-blue.svg",
-      gaming: "src/assets/icons/chess-blue.svg",
+      "code-vibes": "./assets/icons/label-blue.svg",
+      gaming: "./assets/icons/chess-blue.svg",
     },
   },
   orange: {
     name: "Orange",
     images: {
-      "code-vibes": "src/assets/icons/label-orange.svg",
-      gaming: "src/assets/icons/chess-orange.svg",
+      "code-vibes": "./assets/icons/label-orange.svg",
+      gaming: "./assets/icons/chess-orange.svg",
     },
   },
 };
@@ -63,6 +63,7 @@ export function initSettings(): void {
   initPlayerEvents();
   initBoardEvents();
   initPlayButton();
+  restoreSettings();
 }
 
 /** Renders the settings screen in the application container. */
@@ -84,7 +85,7 @@ export function renderSettings(): void {
 /** Registers theme selection and preview event listeners. */
 function initThemeEvents(): void {
   const themeInputs = document.querySelectorAll<HTMLInputElement>(
-    ".settings__input[name='theme']",
+    ".settings__input[name='theme']"
   );
 
   themeInputs.forEach((input) => {
@@ -122,7 +123,7 @@ function handleThemeChange(event: Event): void {
  */
 function updateThemePreview(theme: Theme): void {
   const image = document.querySelector(
-    ".settings__preview-image",
+    ".settings__preview-image"
   ) as HTMLImageElement;
 
   if (!image) return;
@@ -138,7 +139,7 @@ function handleThemeHover(event: Event): void {
   const label = event.currentTarget as HTMLLabelElement;
 
   const input = label.querySelector<HTMLInputElement>(
-    ".settings__input[name='theme']",
+    ".settings__input[name='theme']"
   );
 
   if (!input) return;
@@ -151,7 +152,7 @@ function handleThemeHover(event: Event): void {
 /** Restores the preview of the currently selected theme. */
 function handleThemeDefault(): void {
   const input = document.querySelector<HTMLInputElement>(
-    ".settings__input[name='theme']:checked",
+    ".settings__input[name='theme']:checked"
   );
 
   if (!input) return;
@@ -165,7 +166,7 @@ function handleThemeDefault(): void {
 /** Registers player selection event listeners. */
 function initPlayerEvents(): void {
   const playerInputs = document.querySelectorAll<HTMLInputElement>(
-    ".settings__input[name='player']",
+    ".settings__input[name='player']"
   );
 
   playerInputs.forEach((input) => {
@@ -194,7 +195,7 @@ function handlePlayerChange(event: Event): void {
 function updatePlayerPreview(value: string): void {
   const playerName = PLAYER_DATA[value as keyof typeof PLAYER_DATA].name;
   const playerPreview = document.querySelector<HTMLSpanElement>(
-    ".settings__preview-player",
+    ".settings__preview-player"
   );
 
   if (!playerPreview) return;
@@ -209,7 +210,7 @@ function updatePlayerPreview(value: string): void {
  */
 function updateThemePreviewName(theme: Theme): void {
   const imageName = document.querySelector<HTMLSpanElement>(
-    ".settings__preview-theme",
+    ".settings__preview-theme"
   );
 
   if (!imageName) return;
@@ -219,7 +220,7 @@ function updateThemePreviewName(theme: Theme): void {
 /** Registers board size selection event listeners. */
 function initBoardEvents(): void {
   const boardInputs = document.querySelectorAll<HTMLInputElement>(
-    ".settings__input[name='board']",
+    ".settings__input[name='board']"
   );
 
   boardInputs.forEach((input) => {
@@ -247,7 +248,7 @@ function handleBoardChange(event: Event): void {
  */
 function updateBoardPreview(value: string): void {
   const board = document.querySelector<HTMLSpanElement>(
-    ".settings__preview-board",
+    ".settings__preview-board"
   );
 
   if (!board) return;
@@ -257,19 +258,19 @@ function updateBoardPreview(value: string): void {
 /** Enables the play button when every required setting is selected. */
 function checkSettings(): void {
   const theme = document.querySelector(
-    ".settings__input[name='theme']:checked",
+    ".settings__input[name='theme']:checked"
   );
 
   const player = document.querySelector(
-    ".settings__input[name='player']:checked",
+    ".settings__input[name='player']:checked"
   );
 
   const board = document.querySelector(
-    ".settings__input[name='board']:checked",
+    ".settings__input[name='board']:checked"
   );
 
   const playBtn = document.querySelector<HTMLButtonElement>(
-    ".settings__play-button",
+    ".settings__play-button"
   );
 
   if (!playBtn) return;
@@ -279,7 +280,7 @@ function checkSettings(): void {
 /** Registers the event listener that starts a game. */
 function initPlayButton(): void {
   const playBtn = document.querySelector<HTMLButtonElement>(
-    ".settings__play-button",
+    ".settings__play-button"
   );
 
   if (!playBtn) return;
@@ -294,15 +295,15 @@ function startNewGame(): void {
 /** Reads, validates, and applies the selected game settings. */
 function getSelectedSettings(): void {
   const theme = document.querySelector<HTMLInputElement>(
-    ".settings__input[name='theme']:checked",
+    ".settings__input[name='theme']:checked"
   );
 
   const player = document.querySelector<HTMLInputElement>(
-    ".settings__input[name='player']:checked",
+    ".settings__input[name='player']:checked"
   );
 
   const board = document.querySelector<HTMLInputElement>(
-    ".settings__input[name='board']:checked",
+    ".settings__input[name='board']:checked"
   );
 
   if (!theme || !player || !board) return;
@@ -313,5 +314,32 @@ function getSelectedSettings(): void {
     board: Number(board.value),
   };
 
-  initGame(selectedSettings, PLAYER_DATA);
+  localStorage.setItem("settings", JSON.stringify(selectedSettings));
+
+  initGame(PLAYER_DATA);
+}
+
+function restoreSettings() {
+  const storedSettings = localStorage.getItem("settings");
+
+  if (!storedSettings) return;
+
+  const parsedSettings: GameSettings = JSON.parse(storedSettings);
+
+  const themeInput = document.querySelector<HTMLInputElement>(
+    `.settings__input[name="theme"][value="${parsedSettings.theme}"]`
+  );
+  const playerInput = document.querySelector<HTMLInputElement>(
+    `.settings__input[name="player"][value="${parsedSettings.player}"]`
+  );
+  const boardInput = document.querySelector<HTMLInputElement>(
+    `.settings__input[name="board"][value="${parsedSettings.board}"]`
+  );
+
+  [themeInput, playerInput, boardInput].forEach((input) => {
+    if (!input) return;
+
+    input.checked = true;
+    input.dispatchEvent(new Event("change"));
+  });
 }

@@ -24,7 +24,7 @@
     &::after {
       content: "";
       position: absolute;
-      background-image: url("../../src/assets/icons/yellow-line-big.svg");
+      background-image: url("/assets/icons/yellow-line-big.svg");
       background-repeat: no-repeat;
       background-size: contain;
       height: 50px;
@@ -60,7 +60,7 @@
   }
 
   &__label {
-    font-family: Almarai;
+    font-family: "Almarai-Regular";
     font-size: 1.25rem;
     display: flex;
     align-items: center;
@@ -130,7 +130,7 @@
   }
 
   &__preview-item {
-    font-family: Almarai;
+    font-family: "Almarai-Regular";
     min-width: 0;
     display: flex;
     justify-content: center;
@@ -139,7 +139,7 @@
     &:not(:last-of-type)::after {
       content: "";
       position: absolute;
-      background-image: url("../../src/assets/icons/yellow-diagonal-line.svg");
+      background-image: url("/assets/icons/yellow-diagonal-line.svg");
       background-repeat: no-repeat;
       background-size: contain;
       height: 50px;
@@ -165,8 +165,8 @@
     white-space: nowrap;
 
     &:disabled {
-      color: black;
-      background-color: rgba(255, 255, 0, 0.5);
+      color: #a3a1a1;
+      background-color: #dbdbd6;
     }
 
     span {
@@ -180,7 +180,15 @@
 
   &__play-icon {
     width: 25px;
+    height: 20px;
+    flex-shrink: 0;
+    background-color: #303131;
+    mask: url("/assets/icons/play-icon.svg") center / contain no-repeat;
     transition: transform 200ms ease-in-out;
+  }
+
+  &__play-button:disabled &__play-icon {
+    background-color: #a3a1a1;
   }
 
   &__play-button:hover:not(:disabled) &__play-icon {
@@ -200,7 +208,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: "Almarai";
+    font-family: "Almarai-Regular";
     line-height: 1.2;
     white-space: nowrap;
   }
@@ -210,7 +218,7 @@
     flex: 0 0 60px;
     width: 60px;
     height: 16px;
-    background-image: url("../../src/assets/icons/yellow-line.svg");
+    background-image: url("/assets/icons/yellow-line.svg");
     background-repeat: no-repeat;
     background-size: contain;
   }
