@@ -26,14 +26,17 @@ export function toggleOverlay(): void {
   }
 
   overlay.classList.add("is-closing");
+  closOverlay(overlayWrapper, overlay);
+}
 
+function closOverlay(overlayWrapper: HTMLElement, overlay: HTMLElement) {
   overlay.addEventListener(
     "animationend",
     () => {
       overlayWrapper.classList.add("dNone");
       overlay.classList.remove("is-closing");
     },
-    { once: true },
+    { once: true }
   );
 }
 
@@ -46,6 +49,10 @@ export function handleOverlayButtons(): void {
 
   if (!overlayWrapper || !overlay || !backToGame || !exitGame) return;
 
+  initiateOverlayButtonEvents(overlayWrapper, overlay, backToGame, exitGame);
+}
+
+function initiateOverlayButtonEvents(overlayWrapper: HTMLElement, overlay: HTMLElement, backToGame: HTMLButtonElement, exitGame: HTMLButtonElement) {
   overlayWrapper.addEventListener("click", toggleOverlay);
 
   overlay.addEventListener("click", (event) => {

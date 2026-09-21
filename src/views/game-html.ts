@@ -1,4 +1,5 @@
-import type { GameSettings, ThemeName } from "./settings";
+import type { GameSettings, ThemeName, PlayerData } from "./settings";
+import { createHeader } from "./game";
 
 type GameHeaderData = {
   playerOneImage: string;
@@ -19,10 +20,7 @@ type GameHeaderData = {
  * @param headerHtml - The rendered game header.
  * @returns The game layout HTML.
  */
-export function createGameHtml(
-  settings: GameSettings,
-  headerHtml: string,
-): string {
+export function createGameHtml(settings: GameSettings, headerHtml: string): string {
   return `
   <section id="game" class="game game--${settings.theme}" aria-labelledby="game-title">
     <h1 id="game-title" class="visually-hidden">Memory game</h1>
@@ -42,17 +40,14 @@ export function createGameHtml(
  * @param gameCards - The shuffled card image paths.
  * @returns The board cards HTML.
  */
-export function createBoardHtml(
-  cardsCover: string,
-  gameCards: string[],
-): string {
+export function createBoardHtml(cardsCover: string, gameCards: string[]): string {
   let boardHtml = "";
 
   for (let i = 0; i < gameCards.length; i++) {
     boardHtml += `
       <button class="game__card" type="button" aria-label="Turn over memory card ${i + 1}">
         <img class="game__card-cover" src="${cardsCover}" alt="Face-down memory card">
-        <img class="game__card-image" src="${gameCards[i]}" alt="Memory card ${i + 1}">
+        <img class="game__card-image" draggable="false" src="${gameCards[i]}" alt="Memory card ${i + 1}">
       </button>
     `;
   }
@@ -122,4 +117,31 @@ function createOverlayHtml(theme: ThemeName): string {
     </section>
   </div>
   `;
+}
+
+/**
+ * Renders the game layout in the application container.
+ *
+ * @param settings - The selected game configuration.
+ * @param playerData - The available player metadata.
+ */
+export function renderGameHTML(settings: GameSettings, playerData: PlayerData): void {
+  const app = document.querySelector("#app");
+
+  if (!app) return;
+
+  app.innerHTML = createGameHtml(settings, createHeader(settings, playerData));
+}
+
+/**
+ * Renders the prepared cards on the game board.
+ *
+ * @param cardsCover - The image shown on face-down cards.
+ * @param gameCards - The shuffled card image paths.
+ */
+export function renderBoardHTML(cardsCover: string, gameCards: string[]): void {
+  const board = document.querySelector("#board");
+  if (!board) return;
+
+  board.innerHTML = createBoardHtml(cardsCover, gameCards);
 }
