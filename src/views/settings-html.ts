@@ -15,7 +15,7 @@ export function createSettingsOptionHtml(): string {
         <ul class="settings__list">
           <li>
             <label class="settings__label">
-              <input class="settings__input" type="radio" name="theme" value="code-vibes" />
+              <input class="settings__input" type="radio" name="theme" value="code-vibes" checked/>
               <span class="settings__radio"></span>
               <span class="settings__text">Code vibes theme</span>
             </label>

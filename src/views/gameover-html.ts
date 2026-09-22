@@ -1,5 +1,11 @@
 import type { GameOverScreenData, EndScreenData } from "./gameover";
 
+/**
+ * Creates the final score screen markup for both players.
+ *
+ * @param data - The player names, scores, images, and active theme.
+ * @returns The final score screen HTML.
+ */
 export function renderGameOverScreenHtml({ playerOne, playerOneScore, playerTwo, playerTwoScore, theme, playerOneImage, playerTwoImage }: GameOverScreenData): string {
   return `
   <section class="game-over game-over--${theme}">

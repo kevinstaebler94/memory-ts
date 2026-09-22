@@ -46,8 +46,10 @@ export function createBoardHtml(cardsCover: string, gameCards: string[]): string
   for (let i = 0; i < gameCards.length; i++) {
     boardHtml += `
       <button class="game__card" type="button" aria-label="Turn over memory card ${i + 1}">
-        <img class="game__card-cover" src="${cardsCover}" alt="Face-down memory card">
-        <img class="game__card-image" draggable="false" src="${gameCards[i]}" alt="Memory card ${i + 1}">
+        <span class="game__card-inner">
+          <img class="game__card-cover" src="${cardsCover}" alt="Face-down memory card">
+          <img class="game__card-image" draggable="false" src="${gameCards[i]}" alt="Memory card ${i + 1}">
+        </span>
       </button>
     `;
   }

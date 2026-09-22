@@ -52,6 +52,12 @@ function renderGame(settings: GameSettings, playerData: PlayerData): void {
   handleCardGame(settings, playerData);
 }
 
+/**
+ * Selects the card cover and creates pairs for the chosen board size.
+ *
+ * @param settings - The selected theme and board size.
+ * @returns The card cover image path and the unshuffled card pairs.
+ */
 function prepareGameData(settings: GameSettings) {
   const selectedTheme = THEME_DATA[settings.theme];
   const cards = selectedTheme.images;
@@ -63,6 +69,11 @@ function prepareGameData(settings: GameSettings) {
   return { cardsCover, gameCards };
 }
 
+/**
+ * Shuffles the cards in place using the Fisher-Yates algorithm.
+ *
+ * @param gameCards - The card image paths to reorder.
+ */
 function shuffleCards(gameCards: string[]) {
   for (let i = gameCards.length - 1; i > 0; i--) {
     const randomIndex = Math.floor(Math.random() * (i + 1));
@@ -91,6 +102,14 @@ export function createHeader(settings: GameSettings, playerData: PlayerData): st
   return getPlayerImage(playerOne, settings.theme, playerData);
 }
 
+/**
+ * Sets the active player and creates the header with theme-specific player images.
+ *
+ * @param player - The identifier of the player whose turn starts the game.
+ * @param theme - The active game theme.
+ * @param playerData - The available player metadata.
+ * @returns The game header HTML.
+ */
 function getPlayerImage(player: string, theme: ThemeName, playerData: PlayerData) {
   currentPlayer = player;
   const playerOneImage = playerData[playerOne as keyof PlayerData].images[theme];
@@ -108,26 +127,6 @@ function getPlayerImage(player: string, theme: ThemeName, playerData: PlayerData
     currentPlayer,
     theme,
   });
-}
-
-/**
- * Synchronizes a card's images with its flipped state.
- *
- * @param card - The card whose images should be updated.
- */
-function updateCardVisibility(card: HTMLButtonElement): void {
-  const cover = card.querySelector<HTMLImageElement>(".game__card-cover");
-  const image = card.querySelector<HTMLImageElement>(".game__card-image");
-
-  if (!cover || !image) return;
-
-  if (card.classList.contains("is-flipped")) {
-    cover.style.opacity = "0";
-    image.style.opacity = "1";
-  } else {
-    cover.style.opacity = "1";
-    image.style.opacity = "0";
-  }
 }
 
 /**
@@ -193,7 +192,6 @@ function canFlipCard(card: HTMLButtonElement, state: CardGameState): boolean {
  */
 function flipCard(card: HTMLButtonElement): void {
   card.classList.add("is-flipped");
-  updateCardVisibility(card);
 }
 
 /**
@@ -293,7 +291,6 @@ function handleDifferentCards(firstCard: HTMLButtonElement, secondCard: HTMLButt
  */
 function hideCard(card: HTMLButtonElement): void {
   card.classList.remove("is-flipped");
-  updateCardVisibility(card);
 }
 
 /** Passes the turn to the other player. */
@@ -341,18 +338,20 @@ function checkGameOver(boardSize: number, theme: ThemeName): void {
   const matchedCards = document.querySelectorAll(".game__card.is-matched");
 
   if (matchedCards.length === boardSize) {
-    initGameOverScreen(playerOne, playerOneScore, playerTwo, playerTwoScore, theme);
     setTimeout(() => {
-      if (playerOneScore > playerTwoScore) {
-        renderEndScreen(playerOne, theme);
-      }
-      if (playerOneScore < playerTwoScore) {
-        renderEndScreen(playerTwo, theme);
-      }
-      if (playerOneScore === playerTwoScore) {
-        renderEndScreen("draw", theme);
-      }
-    }, 2000);
+      initGameOverScreen(playerOne, playerOneScore, playerTwo, playerTwoScore, theme);
+      setTimeout(() => {
+        if (playerOneScore > playerTwoScore) {
+          renderEndScreen(playerOne, theme);
+        }
+        if (playerOneScore < playerTwoScore) {
+          renderEndScreen(playerTwo, theme);
+        }
+        if (playerOneScore === playerTwoScore) {
+          renderEndScreen("draw", theme);
+        }
+      }, 2000);
+    }, 1000);
   }
 }
 

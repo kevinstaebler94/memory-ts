@@ -29,6 +29,12 @@ export function toggleOverlay(): void {
   closOverlay(overlayWrapper, overlay);
 }
 
+/**
+ * Hides the exit dialog and clears its closing state when the animation ends.
+ *
+ * @param overlayWrapper - The wrapper to hide after the closing animation.
+ * @param overlay - The dialog element running the closing animation.
+ */
 function closOverlay(overlayWrapper: HTMLElement, overlay: HTMLElement) {
   overlay.addEventListener(
     "animationend",
@@ -52,6 +58,14 @@ export function handleOverlayButtons(): void {
   initiateOverlayButtonEvents(overlayWrapper, overlay, backToGame, exitGame);
 }
 
+/**
+ * Registers backdrop, dialog, resume, and exit interactions.
+ *
+ * @param overlayWrapper - The backdrop that toggles the dialog when clicked.
+ * @param overlay - The dialog whose clicks must not reach the backdrop.
+ * @param backToGame - The button that closes the dialog to resume play.
+ * @param exitGame - The button that resets the game and opens settings.
+ */
 function initiateOverlayButtonEvents(overlayWrapper: HTMLElement, overlay: HTMLElement, backToGame: HTMLButtonElement, exitGame: HTMLButtonElement) {
   overlayWrapper.addEventListener("click", toggleOverlay);
 

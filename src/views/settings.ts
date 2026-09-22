@@ -90,6 +90,7 @@ function initThemeEvents(): void {
 
   themeInputs.forEach((input) => {
     input.addEventListener("change", handleThemeChange);
+    input.addEventListener("click", handleThemeChange);
     input.addEventListener("change", checkSettings);
   });
 
@@ -319,6 +320,7 @@ function getSelectedSettings(): void {
   initGame(PLAYER_DATA);
 }
 
+/** Restores saved selections from local storage and triggers their preview updates. */
 function restoreSettings() {
   const storedSettings = localStorage.getItem("settings");
 
